@@ -63,13 +63,6 @@
 					<target>${java.version}</target>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<configuration>
-					<outputDirectory>/Users/sanarwal/Desktop/apache-tomcat-8.5.9/webapps</outputDirectory>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 </project>
