@@ -1,34 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.glarimy</groupId>
-	<artifactId>cmad-adv-one</artifactId>
-	<packaging>war</packaging>
+	<groupId>com.cisco.cmad</groupId>
+	<artifactId>blogger</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 		<junit.version>4.12</junit.version>
-		<hibernate.version>5.2.2.Final</hibernate.version>
-		<derby.version>10.10.1.1</derby.version>
-		<jersey.version>2.22.2</jersey.version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-json</artifactId>
-			<version>1.19</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-servlet</artifactId>
-			<version>1.19</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-server</artifactId>
-			<version>1.19</version>
-		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -36,14 +17,14 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${hibernate.version}</version>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-core</artifactId>
+			<version>3.3.3</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derby</artifactId>
-			<version>${derby.version}</version>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-web</artifactId>
+			<version>3.3.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mongodb</groupId>
@@ -52,7 +33,7 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>cmad</finalName>
+		<finalName>blogger</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -62,6 +43,32 @@
 					<source>${java.version}</source>
 					<target>${java.version}</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.3</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<manifestEntries>
+										<Main-Class>io.vertx.core.Launcher</Main-Class>
+										<Main-Verticle>com.cisco.blogger.verticles.BlogVerticle</Main-Verticle>
+									</manifestEntries>
+								</transformer>
+							</transformers>
+							<artifactSet />
+							<outputFile>${project.build.directory}/${project.artifactId}-${project.version}-fat.jar</outputFile>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -88,4 +95,24 @@
 			</plugin>
 		</plugins>
 	</build>
+	<name>CMAD Blogger</name>
+	<description>CMAD Blogger Project implementation</description>
+	<organization>
+		<name>Cisco Systems India Pvt Ltd</name>
+		<url>www.cisco.com</url>
+	</organization>
+	<scm>
+		<developerConnection>Sahil Narwal, Vishal Kumar</developerConnection>
+		<connection>https://github.com/sahilnarwal/blogger.git</connection>
+		<url>https://github.com/sahilnarwal/blogger</url>
+	</scm>
+	<issueManagement>
+		<url>https://github.com/sahilnarwal/blogger/issues</url>
+		<system>Git Hub</system>
+	</issueManagement>
+	<ciManagement>
+		<system>Travis CI</system>
+		<url>https://travis-ci.org/sahilnarwal/blogger</url>
+	</ciManagement>
+	<inceptionYear>Jan 2017</inceptionYear>
 </project>
