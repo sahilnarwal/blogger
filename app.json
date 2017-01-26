@@ -1,0 +1,16 @@
+{
+  "name": "blogger",
+  "description": "CMAD Blogger",
+  "scripts": {
+  },
+  "env": {
+  },
+  "formation": {
+  },
+  "addons": [
+
+  ],
+  "buildpacks": [
+
+  ]
+}
