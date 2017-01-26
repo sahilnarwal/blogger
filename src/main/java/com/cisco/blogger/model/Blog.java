@@ -6,7 +6,9 @@ public class Blog {
 	
 	private String content;
 	
-	
+	public Blog(){
+		
+	}
 
 	public Blog(String title, String content) {
 		super();
