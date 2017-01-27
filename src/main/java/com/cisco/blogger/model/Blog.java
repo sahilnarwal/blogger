@@ -1,10 +1,18 @@
 package com.cisco.blogger.model;
 
+import java.sql.Date;
+
 public class Blog {
 	
 	private String title;
 	
+	private String[] tags;
+	
 	private String content;
+	
+	private Date timeOfCreation;
+	
+	private String author;
 	
 	public Blog(){
 		

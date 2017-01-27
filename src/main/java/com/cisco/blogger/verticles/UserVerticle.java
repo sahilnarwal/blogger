@@ -1,66 +1,38 @@
 package com.cisco.blogger.verticles;
 
-import org.mongodb.morphia.dao.BasicDAO;
-import org.mongodb.morphia.query.Query;
-
-import com.cisco.blogger.model.UserDetail;
-import com.cmad.cmad.infra.MongoService;
-import com.cmad.cmad.model.dto.LoginDTO;
-
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.json.Json;
+import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.BodyHandler;
 
 public class UserVerticle extends AbstractVerticle {
 
 	
 	@Override
 	public void start() throws Exception {
-		vertx.eventBus().consumer("com.cisco.cmad.projects.login", message -> {
-			LoginDTO loginData = Json.decodeValue(message.body().toString(), LoginDTO.class);
-			System.out.println("UserVerticle.start()"+loginData);
-			
-			System.out.println("UserVerticle.start() userbname"+loginData.getUsername());
-			System.out.println("UserVerticle.start() pwd "+loginData.getPwd());
-			BasicDAO<UserDetail, String> dao = new BasicDAO<>(UserDetail.class, MongoService.getDataStore());
-			Query<UserDetail> query=dao.createQuery();
-			query.and(
-					query.criteria("username").equal(loginData.getUsername()),
-					query.criteria("pwd").equal(loginData.getPwd()));
-			UserDetail user =query.get();
-				MongoService.close();
-			if(user==null){
-				message.reply("No User Found");
-			}else{
-				message.reply(Json.encodePrettily(user));
-			}
-			
-			/*dao.createQuery().*/
-		});
 		
-		vertx.eventBus().consumer("com.cisco.cmad.projects.register", message -> {
-			System.out.println("UserVerticle.start() register ");
-			UserDetail regData = Json.decodeValue(message.body().toString(), UserDetail.class);
-			if(regData!=null){
-				System.out.println("UserVerticle.start()getFullName "+regData.getFullName());
-				System.out.println("UserVerticle.start()pwd "+regData.getPwd());
-				System.out.println("UserVerticle.start() usrName"+regData.getUsername());
-			}
-			BasicDAO<UserDetail, String> dao = new BasicDAO<>(UserDetail.class, MongoService.getDataStore());
-			dao.save(regData);
-			/*Query<UserDetail> query=dao.createQuery();
-			query.
-			query.and(
-					query.criteria("username").equal(loginData.getUsername()),
-					query.criteria("pwd").equal(loginData.getPwd()));*/
-			Object user =dao.save(regData).getId();/*query.get()*/;
-				MongoService.close();
-			if(user==null){
-				message.reply("No User created");
-			}else{
-				message.reply(Json.encodePrettily(user));
-			}
-			
-			/*dao.createQuery().*/
+		Router router = SharedRouter.router;
+		
+		userRegistration(router);
+		userLogin(router);
+	}
+
+	private void userLogin(Router router) {
+		router.route("/api/user/login").handler(BodyHandler.create());
+		router.post("/api/user/login").handler(rctx -> {
+			vertx.eventBus().send("com.cisco.blogger.user.fetch", rctx.getBodyAsJson(), r -> {
+				rctx.response().setStatusCode(200).end(r.result().body().toString());
+			});
+		});
+	}
+
+	private void userRegistration(Router router) {
+		router.route("/api/user").handler(BodyHandler.create());
+		router.post("/api/user").handler(rctx -> {
+			String name = rctx.request().getParam("name");
+			String pwd = rctx.request().getParam("pwd");
+			vertx.eventBus().send("com.cisco.blogger.user.add", rctx.getBodyAsJson(), r -> {
+				rctx.response().setStatusCode(200).end(r.result().body().toString());
+			});
 		});
 	}
 }

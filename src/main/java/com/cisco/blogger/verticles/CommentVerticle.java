@@ -7,27 +7,21 @@ import io.vertx.core.json.Json;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 
-public class BlogVerticle extends AbstractVerticle{
+public class CommentVerticle extends AbstractVerticle{
 
 	@Override
 	public void start() throws Exception {
 		Router router = SharedRouter.router;
 		
-		router.get("/api/blog/:title").handler(rctx -> {
-			String title = rctx.request().getParam("title");
+		router.get("/api/:blog/comment").handler(rctx -> {
+			String title = rctx.request().getParam("blog");
 			final Blog blog = new Blog(title, "Mongo on Vertx");
 			rctx.response().setStatusCode(200).putHeader("content-type", "application/json; charset=utf-8")
 					.end(Json.encodePrettily(blog));
 		});
 		
-		router.get("/api/blog").handler(rctx -> {
-			vertx.eventBus().send("com.cisco.blogger.blog.fetch", rctx.getBodyAsJson(), r -> {
-				rctx.response().setStatusCode(200).end();
-			});
-		});
-		
 		router.route("/api/blog").handler(BodyHandler.create());
-		router.post("/api/blog").handler(rctx -> {
+		router.post("/api/blog/comment").handler(rctx -> {
 			vertx.eventBus().send("com.cisco.blogger.blog.add", rctx.getBodyAsJson(), r -> {
 				rctx.response().setStatusCode(200).end();
 			});

@@ -5,7 +5,7 @@ import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
 @Entity
-public class UserDetail {
+public class User {
 
 	@Id
 	private String id = new ObjectId().toString();
