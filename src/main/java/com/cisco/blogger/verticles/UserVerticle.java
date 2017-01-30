@@ -9,30 +9,38 @@ public class UserVerticle extends AbstractVerticle {
 	
 	@Override
 	public void start() throws Exception {
-		
+		System.out.println("Strating User Verticle");
 		Router router = SharedRouter.router;
+		// Add User Routes
+		registerUserRegistrationRoute(router);
 		
-		userRegistration(router);
-		userLogin(router);
+		registerUserLoginRoute(router);
 	}
-
-	private void userLogin(Router router) {
-		router.route("/api/user/login").handler(BodyHandler.create());
-		router.post("/api/user/login").handler(rctx -> {
-			vertx.eventBus().send("com.cisco.blogger.user.fetch", rctx.getBodyAsJson(), r -> {
+	
+	private void registerUserLoginRoute(Router router) {
+		router.route(Routes.LOGIN).handler(BodyHandler.create());
+		router.post(Routes.LOGIN).handler(rctx -> {
+			vertx.eventBus().send(Topics.GET_USER, rctx.getBodyAsJson(), r -> {
 				rctx.response().setStatusCode(200).end(r.result().body().toString());
 			});
 		});
 	}
 
-	private void userRegistration(Router router) {
-		router.route("/api/user").handler(BodyHandler.create());
-		router.post("/api/user").handler(rctx -> {
+	private void registerUserRegistrationRoute(Router router) {
+		router.route(Routes.USER).handler(BodyHandler.create());
+		router.post(Routes.USER).handler(rctx -> {
 			String name = rctx.request().getParam("name");
 			String pwd = rctx.request().getParam("pwd");
-			vertx.eventBus().send("com.cisco.blogger.user.add", rctx.getBodyAsJson(), r -> {
+			vertx.eventBus().send(Topics.ADD_USER, rctx.getBodyAsJson(), r -> {
 				rctx.response().setStatusCode(200).end(r.result().body().toString());
 			});
 		});
 	}
+	
+	@Override
+	public void stop() throws Exception {
+		System.out.println("Stopping User Verticle");
+		super.stop();
+	}
+
 }

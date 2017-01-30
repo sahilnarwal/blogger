@@ -5,6 +5,6 @@ import io.vertx.ext.web.Router;
 
 public class SharedRouter {
 	
-	public static Router router = Router.router(Vertx.vertx());
+	public static final Router router = Router.router(Vertx.vertx());
 
 }
