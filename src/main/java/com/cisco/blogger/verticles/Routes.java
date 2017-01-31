@@ -14,8 +14,11 @@ public interface Routes {
 	
 	String LOGIN = "/api/user/login";
 	
+	
 	String COMMENT = "/api/blog/comment";
 	
 	String SEARCH_COMMENT = "/api/:blog/comment";
+	
+	String UPDATE_USER = "/api/user/update";
 
 }

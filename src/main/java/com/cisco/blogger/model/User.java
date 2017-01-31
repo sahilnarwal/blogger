@@ -10,6 +10,10 @@ public class User {
 	@Id
 	private String id = new ObjectId().toString();
 	
+	public String getId() {
+		return id;
+	}
+
 	private String username;
 	private String pwd;
 	private String fullName;
