@@ -120,14 +120,8 @@ public class UserDBVerticle extends AbstractVerticle {
 			System.out.println(" usrName"+regData.getUsername());
 		}
 		BasicDAO<User, String> dao = new BasicDAO<>(User.class, datatstore);
-		dao.save(regData);
-		Query<User> query=dao.createQuery();
-		query.and(
-				query.criteria("username").equal(regData.getUsername()),
-				query.criteria("pwd").equal(regData.getPwd()));
-		Object user =dao.save(regData).getId();
-		query.get();
-		if(user==null){
+		Object user=dao.save(regData).getId();
+				if(user==null){
 			message.reply("No User created");
 		}else{
 			message.reply(Json.encodePrettily(user));

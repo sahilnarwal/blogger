@@ -1,18 +1,27 @@
 package com.cisco.blogger.model;
 
-import java.sql.Date;
+import java.util.Date;
+
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Id;
 
 public class Blog {
 	
+	@Id
+	private String id = new ObjectId().toString();
+	
+	
+
 	private String title;
 	
 	private String[] tags;
 	
 	private String content;
 	
-	private Date timeOfCreation;
+	private Date timeOfCreation = new Date();
 	
 	private String author;
+	
 	
 	public Blog(){
 		
@@ -39,10 +48,29 @@ public class Blog {
 	public void setContent(String content) {
 		this.content = content;
 	}
+	
+	public String[] getTags() {
+		return tags;
+	}
 
+	public void setTags(String[] tags) {
+		this.tags = tags;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getId() {
+		return id;
+	}
 	@Override
 	public String toString() {
-		return "Blog [title=" + title + ", content=" + content + "]";
+		return "Blog [title=" + title + ", content=" + content + "id "+id+"]";
 	}
 
 }
