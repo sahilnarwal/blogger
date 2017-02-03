@@ -15,8 +15,21 @@ public class UserVerticle extends AbstractVerticle {
 		registerUserRegistrationRoute(router);
 		
 		registerUserLoginRoute(router);
+		
+		registerUserUpdateRoute(router);
 	}
 	
+	private void registerUserUpdateRoute(Router router) {
+
+		router.route(Routes.UPDATE_USER).handler(BodyHandler.create());
+		router.post(Routes.UPDATE_USER).handler(rctx -> {
+			vertx.eventBus().send(Topics.UPDATE_USER, rctx.getBodyAsJson(), r -> {
+				rctx.response().setStatusCode(200).end(r.result().body().toString());
+			});
+		});
+	
+	}
+
 	private void registerUserLoginRoute(Router router) {
 		router.route(Routes.LOGIN).handler(BodyHandler.create());
 		router.post(Routes.LOGIN).handler(rctx -> {
