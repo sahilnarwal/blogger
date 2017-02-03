@@ -18,7 +18,15 @@ public class User {
 	private String pwd;
 	private String fullName;
 	
+	private String areaOfInterest;
 	
+	
+	public String getAreaOfInterest() {
+		return areaOfInterest;
+	}
+	public void setAreaOfInterest(String areaOfInterest) {
+		this.areaOfInterest = areaOfInterest;
+	}
 	public String getUsername() {
 		return username;
 	}

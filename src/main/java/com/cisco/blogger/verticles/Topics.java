@@ -22,4 +22,6 @@ public interface Topics {
 	
 	String ADD_COMMENT = "com.cisco.blogger.comment.add";
 	
+	String FAV_BLOG = "com.cisco.blogger.blog.fav";
+	
 }

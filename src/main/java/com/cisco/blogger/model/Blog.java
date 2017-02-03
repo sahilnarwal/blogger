@@ -5,6 +5,7 @@ import java.util.Date;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.PrePersist;
 @Entity
 public class Blog {
 	
@@ -19,7 +20,9 @@ public class Blog {
 	
 	private String content;
 	
-	private Date timeOfCreation = new Date();
+	private Date timeOfCreation ;
+	
+	private Date updateDate;
 	
 	private String author;
 	
@@ -69,9 +72,20 @@ public class Blog {
 	public String getId() {
 		return id;
 	}
+	
+	@PrePersist
+	public void prePersist() {
+		System.out.println("Blog.prePersist() timeOfCreation "+timeOfCreation);
+		System.out.println("Blog.prePersist() updateDate "+updateDate);
+		timeOfCreation = (timeOfCreation == null) ? new Date() : timeOfCreation;
+	    updateDate = (updateDate == null) ? timeOfCreation : new Date();
+	}
 	@Override
 	public String toString() {
 		return "Blog [title=" + title + ", content=" + content + "id "+id+"]";
 	}
+	
+	
+	
 
 }

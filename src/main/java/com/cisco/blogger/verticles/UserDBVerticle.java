@@ -101,7 +101,8 @@ public class UserDBVerticle extends AbstractVerticle {
 		Query<User> query=dao.createQuery();
 		query.and(
 				query.criteria("username").equal(regData.getUsername()));
-	UpdateOperations<User>	update=dao.createUpdateOperations().set("fullName", regData.getFullName()).set("pwd", regData.getPwd());
+		UpdateOperations<User> update = dao.createUpdateOperations().set("fullName", regData.getFullName())
+				.set("pwd", regData.getPwd()).set("areaOfInterest", regData.getAreaOfInterest());
 		int updatedCount = dao.updateFirst(query, update).getUpdatedCount();
 		System.out.println("UserDBVerticle.processUpdateUser()updatedCount"+updatedCount);
 		if( updatedCount==1){
@@ -118,6 +119,7 @@ public class UserDBVerticle extends AbstractVerticle {
 			System.out.println("getFullName "+regData.getFullName());
 			System.out.println("pwd "+regData.getPwd());
 			System.out.println(" usrName"+regData.getUsername());
+			System.out.println(" areofIntrest "+regData.getAreaOfInterest());
 		}
 		BasicDAO<User, String> dao = new BasicDAO<>(User.class, datatstore);
 		Object user=dao.save(regData).getId();

@@ -1,9 +1,6 @@
 package com.cisco.blogger.verticles;
 
-import com.cisco.blogger.model.Blog;
-
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.json.Json;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 
@@ -19,10 +16,32 @@ public class BlogVerticle extends AbstractVerticle{
 		registerAddBlogRoute(router);
 		registerSearchBlogRoute(router);
 		registerDeleteBlogRoute(router);
+		registerUpdateBlogRoute(router);
 		
 		registerGetBlogRoute(router);
 		
+		registerFavBlogRoute(router);
 		
+		
+	}
+
+	private void registerUpdateBlogRoute(Router router) {
+		router.route(Routes.UPDATE_BLOG).handler(BodyHandler.create());
+		router.post(Routes.UPDATE_BLOG).handler(rctx -> {
+			vertx.eventBus().send(Topics.UPDATE_BLOG, rctx.getBodyAsJson(), r -> {
+				rctx.response().setStatusCode(200).end(r.result().body().toString());
+			});
+		});
+	}
+
+	private void registerFavBlogRoute(Router router) {
+		router.get(Routes.FAV_BLOG).handler(rctx -> {
+			String title = rctx.request().getParam("areaOfInterest");
+			System.out.println("BlogVerticle.registerSearchBlogRoute() title "+title);
+			vertx.eventBus().send(Topics.FAV_BLOG, title, r -> {
+				rctx.response().setStatusCode(200).end(r.result().body().toString());
+			});
+		});
 	}
 
 	private void registerDeleteBlogRoute(Router router) {

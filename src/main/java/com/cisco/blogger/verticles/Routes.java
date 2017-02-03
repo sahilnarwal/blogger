@@ -10,6 +10,8 @@ public interface Routes {
 	
 	String BLOG = "/api/blog";
 	
+	String FAV_BLOG="/api/:areaOfInterest/blog";
+	
 	String SEARCH_BLOG = "/api/blog/:title";
 	
 	String LOGIN = "/api/user/login";
