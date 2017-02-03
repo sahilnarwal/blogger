@@ -62,10 +62,10 @@ public class BlogDBVerticle extends AbstractVerticle{
 	private void searchBlog(Message<Object> message) {
 		String title = message.body().toString();
 		System.out.println("BlogDBVerticle.processFetchBlog()"+title);
-		String finalStr="/.*"+title+".*/";
-		System.out.println("BlogDBVerticle.searchBlog() finalStr "+finalStr);
+		//String finalStr="/.*"+title+".*/";
+	//	System.out.println("BlogDBVerticle.searchBlog() finalStr "+finalStr);
 		BasicDAO<Blog, String> dao = new BasicDAO<>(Blog.class, datatstore);
-		List<Blog> retreivedBlogs=dao.createQuery().field("title").containsIgnoreCase(finalStr).asList();
+		List<Blog> retreivedBlogs=dao.createQuery().field("title").containsIgnoreCase(title).asList();
 		System.out.println("BlogDBVerticle.processFetchBlog() retreivedBlog "+retreivedBlogs);
 		if(retreivedBlogs==null){
 			message.reply("Blog Doesn't Exist");
