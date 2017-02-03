@@ -1,16 +1,25 @@
 package com.cisco.blogger.model;
 
-import java.sql.Date;
 
+import java.util.Date;
+
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+@Entity
 public class Comment {
+	
+	@Id
+	private String id = new ObjectId().toString();
+	
 
 	private String blogId;
 	
-	String userName;
+	private String userName;
 	
 	private String comment;
 	
-	private Date dateOfCreation;
+	private Date dateOfCreation = new Date();
 
 	public String getBlogId() {
 		return blogId;
@@ -36,12 +45,13 @@ public class Comment {
 		this.comment = comment;
 	}
 
-	public Date getDateOfCreation() {
-		return dateOfCreation;
-	}
-
-	public void setDateOfCreation(Date dateOfCreation) {
-		this.dateOfCreation = dateOfCreation;
+	
+	public String getId(){
+		return id;
 	}
 	
+	@Override
+	public String toString() {
+		return "Comment [comment=" + comment + ", blogid=" + blogId + "user "+userName+"]";
+		}
 }

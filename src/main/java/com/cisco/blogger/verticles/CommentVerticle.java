@@ -21,7 +21,7 @@ public class CommentVerticle extends AbstractVerticle{
 		router.route(Routes.COMMENT).handler(BodyHandler.create());
 		router.post(Routes.COMMENT).handler(rctx -> {
 			vertx.eventBus().send(Topics.ADD_COMMENT, rctx.getBodyAsJson(), r -> {
-				rctx.response().setStatusCode(200).end();
+				rctx.response().setStatusCode(200).end(r.result().body().toString());
 			});
 		});
 	}
@@ -30,12 +30,9 @@ public class CommentVerticle extends AbstractVerticle{
 		router.get(Routes.SEARCH_COMMENT).handler(rctx -> {
 			String title = rctx.request().getParam("blog");
 			System.out.println("Blog title to search comments for="+title);
-			vertx.eventBus().send(Topics.GET_COMMENT, rctx.getBodyAsJson(), r -> {
-				rctx.response().setStatusCode(200).end();
+			vertx.eventBus().send(Topics.GET_COMMENT, title, r -> {
+				rctx.response().setStatusCode(200).end(r.result().body().toString());
 			});
-			//final Blog blog = new Blog(title, "Mongo on Vertx");
-			//rctx.response().setStatusCode(200).putHeader("content-type", "application/json; charset=utf-8")
-			//		.end(Json.encodePrettily(blog));
 		});
 	}
 
