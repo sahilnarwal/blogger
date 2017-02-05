@@ -1,4 +1,4 @@
-package com.cisco.blogger.verticles;
+package com.cisco.blogger.blog.db;
 
 import java.util.List;
 
@@ -6,10 +6,9 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.dao.BasicDAO;
 import org.mongodb.morphia.mapping.Mapper;
-import org.mongodb.morphia.query.Query;
-import org.mongodb.morphia.query.QueryResults;
 
-import com.cisco.blogger.model.Blog;
+import com.cisco.blogger.blog.BlogTopics;
+import com.cisco.blogger.blog.model.Blog;
 import com.mongodb.MongoClient;
 
 import io.vertx.core.AbstractVerticle;
@@ -31,28 +30,28 @@ public class BlogDBVerticle extends AbstractVerticle{
 		System.out.println("Strating Blog DB Verticle");
 		
 		// Add Topic Listeners
-		vertx.eventBus().consumer(Topics.GET_BLOG, message -> {
+		vertx.eventBus().consumer(BlogTopics.GET_BLOG, message -> {
 			System.out.println("Blog Fetched = ");
 			processFetchBlog(message);
 		});
 		
-		vertx.eventBus().consumer(Topics.ADD_BLOG, message -> {
+		vertx.eventBus().consumer(BlogTopics.ADD_BLOG, message -> {
 			createBlog(message);
 		});
 		
-		vertx.eventBus().consumer(Topics.SEARCH_BLOG, message -> {
+		vertx.eventBus().consumer(BlogTopics.SEARCH_BLOG, message -> {
 			System.out.println("Blog Searched = ");
 			searchBlog(message);
 			message.reply(true);
 		});
 		
-		vertx.eventBus().consumer(Topics.UPDATE_BLOG, message -> {
+		vertx.eventBus().consumer(BlogTopics.UPDATE_BLOG, message -> {
 			//Blog blog = Json.decodeValue(message.body().toString(), Blog.class);
 			System.out.println("Blog Updated = ");
 			message.reply(true);
 		});
 		
-		vertx.eventBus().consumer(Topics.DELETE_BLOG, message -> {
+		vertx.eventBus().consumer(BlogTopics.DELETE_BLOG, message -> {
 			System.out.println("Blog deleted = ");
 			deleteBlog(message);
 		});

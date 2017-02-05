@@ -1,4 +1,4 @@
-package com.cisco.blogger.model;
+package com.cisco.blogger.blog.model;
 
 import java.util.Date;
 

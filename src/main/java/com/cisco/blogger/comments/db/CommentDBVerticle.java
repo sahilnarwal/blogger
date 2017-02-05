@@ -1,14 +1,13 @@
-package com.cisco.blogger.verticles;
+package com.cisco.blogger.comments.db;
 
 import java.util.List;
 
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.dao.BasicDAO;
-import org.mongodb.morphia.mapping.Mapper;
 
-import com.cisco.blogger.model.Blog;
-import com.cisco.blogger.model.Comment;
+import com.cisco.blogger.comments.CommentTopics;
+import com.cisco.blogger.comments.model.Comment;
 import com.mongodb.MongoClient;
 
 import io.vertx.core.AbstractVerticle;
@@ -30,14 +29,14 @@ public class CommentDBVerticle extends AbstractVerticle {
 		
 		System.out.println("Strating Comment DB Verticle");
 
-		vertx.eventBus().consumer(Topics.GET_COMMENT, message -> {
+		vertx.eventBus().consumer(CommentTopics.GET_COMMENT, message -> {
 			//Comment comment = Json.decodeValue(message.body().toString(), Comment.class);
 			System.out.println("Comment Fetched = ");
 			fetchComment(message);
 			message.reply(true);
 		});
 		
-		vertx.eventBus().consumer(Topics.ADD_COMMENT, message -> {
+		vertx.eventBus().consumer(CommentTopics.ADD_COMMENT, message -> {
 			//Comment comment = Json.decodeValue(message.body().toString(), Comment.class);
 			System.out.println("Comment Added = ");
 			createComment(message);

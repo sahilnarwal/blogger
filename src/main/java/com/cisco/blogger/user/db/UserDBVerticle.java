@@ -1,15 +1,14 @@
-package com.cisco.blogger.verticles;
+package com.cisco.blogger.user.db;
 
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.dao.BasicDAO;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
-import org.mongodb.morphia.query.UpdateResults;
 
-import com.cisco.blogger.model.User;
+import com.cisco.blogger.user.UserTopics;
+import com.cisco.blogger.user.model.User;
 import com.mongodb.MongoClient;
-import com.mongodb.WriteConcern;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.eventbus.Message;
@@ -30,7 +29,7 @@ public class UserDBVerticle extends AbstractVerticle {
 		
 		System.out.println("Strating User DB Verticle");
 		
-		vertx.eventBus().consumer(Topics.GET_USER, message -> {
+		vertx.eventBus().consumer(UserTopics.GET_USER, message -> {
 			getUserDetails(message);
 			//User user = Json.decodeValue(message.body().toString(), User.class);
 			System.out.println("User Fetched = ");
@@ -55,7 +54,7 @@ public class UserDBVerticle extends AbstractVerticle {
 			}*/
 		});
 		
-		vertx.eventBus().consumer(Topics.ADD_USER, message -> {
+		vertx.eventBus().consumer(UserTopics.ADD_USER, message -> {
 			//User user = Json.decodeValue(message.body().toString(), User.class);
 			System.out.println("User Added = ");
 			processAddUser(message);
@@ -82,7 +81,7 @@ public class UserDBVerticle extends AbstractVerticle {
 			
 		});
 		
-		vertx.eventBus().consumer(Topics.UPDATE_USER, message -> {
+		vertx.eventBus().consumer(UserTopics.UPDATE_USER, message -> {
 			//User user = Json.decodeValue(message.body().toString(), User.class);
 			System.out.println("User updated = ");
 			processUpdateUser(message);

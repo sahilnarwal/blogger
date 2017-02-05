@@ -1,4 +1,4 @@
-package com.cisco.blogger.verticles;
+package com.cisco.blogger;
 
 import io.vertx.core.Vertx;
 import io.vertx.ext.web.Router;

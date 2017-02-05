@@ -1,4 +1,4 @@
-package com.cisco.blogger.model;
+package com.cisco.blogger.user.model;
 
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;

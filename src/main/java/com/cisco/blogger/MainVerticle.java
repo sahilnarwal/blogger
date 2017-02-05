@@ -1,4 +1,11 @@
-package com.cisco.blogger.verticles;
+package com.cisco.blogger;
+
+import com.cisco.blogger.blog.BlogVerticle;
+import com.cisco.blogger.blog.db.BlogDBVerticle;
+import com.cisco.blogger.comments.CommentVerticle;
+import com.cisco.blogger.comments.db.CommentDBVerticle;
+import com.cisco.blogger.user.UserVerticle;
+import com.cisco.blogger.user.db.UserDBVerticle;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.DeploymentOptions;

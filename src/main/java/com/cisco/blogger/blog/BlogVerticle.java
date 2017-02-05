@@ -1,9 +1,8 @@
-package com.cisco.blogger.verticles;
+package com.cisco.blogger.blog;
 
-import com.cisco.blogger.model.Blog;
+import com.cisco.blogger.SharedRouter;
 
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.json.Json;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 
@@ -26,9 +25,9 @@ public class BlogVerticle extends AbstractVerticle{
 	}
 
 	private void registerDeleteBlogRoute(Router router) {
-		router.route(Routes.DELETE_BLOG).handler(BodyHandler.create());
-		router.post(Routes.DELETE_BLOG).handler(rctx -> {
-			vertx.eventBus().send(Topics.DELETE_BLOG, rctx.getBodyAsJson(), r -> {
+		router.route(BlogRoutes.BLOG).handler(BodyHandler.create());
+		router.delete(BlogRoutes.BLOG).handler(rctx -> {
+			vertx.eventBus().send(BlogTopics.DELETE_BLOG, rctx.getBodyAsJson(), r -> {
 				rctx.response().setStatusCode(200).end(r.result().body().toString());
 			});
 		});
@@ -36,9 +35,9 @@ public class BlogVerticle extends AbstractVerticle{
 	}
 
 	private void registerAddBlogRoute(Router router) {
-		router.route(Routes.BLOG).handler(BodyHandler.create());
-		router.post(Routes.BLOG).handler(rctx -> {
-			vertx.eventBus().send(Topics.ADD_BLOG, rctx.getBodyAsJson(), r -> {
+		router.route(BlogRoutes.BLOG).handler(BodyHandler.create());
+		router.post(BlogRoutes.BLOG).handler(rctx -> {
+			vertx.eventBus().send(BlogTopics.ADD_BLOG, rctx.getBodyAsJson(), r -> {
 				rctx.response().setStatusCode(200).end(r.result().body().toString());
 			});
 		});
@@ -46,21 +45,21 @@ public class BlogVerticle extends AbstractVerticle{
 
 	private void registerGetBlogRoute(Router router) {
 		System.out.println("BlogVerticle.registerGetBlogRoute()");
-		router.get(Routes.BLOG).handler(rctx -> {
+		router.get(BlogRoutes.BLOG).handler(rctx -> {
 		String id=	rctx.request().getHeader("id");
 		System.out.println("BlogVerticle.registerGetBlogRoute() id "+id);
 		
-			vertx.eventBus().send(Topics.GET_BLOG, id, r -> {
+			vertx.eventBus().send(BlogTopics.GET_BLOG, id, r -> {
 				rctx.response().setStatusCode(200).end(r.result().body().toString());
 			});
 		});
 	}
 
 	private void registerSearchBlogRoute(Router router) {
-		router.get(Routes.SEARCH_BLOG).handler(rctx -> {
+		router.get(BlogRoutes.SEARCH_BLOG).handler(rctx -> {
 			String title = rctx.request().getParam("title");
 			System.out.println("BlogVerticle.registerSearchBlogRoute() title "+title);
-			vertx.eventBus().send(Topics.SEARCH_BLOG, title, r -> {
+			vertx.eventBus().send(BlogTopics.SEARCH_BLOG, title, r -> {
 				rctx.response().setStatusCode(200).end(r.result().body().toString());
 			});
 		});
