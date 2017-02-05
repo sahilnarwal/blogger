@@ -1,6 +1,7 @@
 package com.cisco.blogger.blog.model;
 
-import java.util.Date;
+import java.time.Instant;
+import java.util.Arrays;
 
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
@@ -10,8 +11,6 @@ public class Blog {
 	
 	@Id
 	private String id = new ObjectId().toString();
-	
-	
 
 	private String title;
 	
@@ -19,7 +18,7 @@ public class Blog {
 	
 	private String content;
 	
-	private Date timeOfCreation = new Date();
+	private Instant timeOfCreation = Instant.now();
 	
 	private String author;
 	
@@ -69,9 +68,19 @@ public class Blog {
 	public String getId() {
 		return id;
 	}
-	@Override
-	public String toString() {
-		return "Blog [title=" + title + ", content=" + content + "id "+id+"]";
+
+	public Instant getTimeOfCreation() {
+		return timeOfCreation;
 	}
 
+	public void setTimeOfCreation(Instant timeOfCreation) {
+		this.timeOfCreation = timeOfCreation;
+	}
+
+	@Override
+	public String toString() {
+		return "Blog [id=" + id + ", title=" + title + ", tags=" + Arrays.toString(tags) + ", content=" + content
+				+ ", timeOfCreation=" + timeOfCreation + ", author=" + author + "]";
+	}
+	
 }

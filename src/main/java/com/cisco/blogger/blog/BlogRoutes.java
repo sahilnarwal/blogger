@@ -4,6 +4,8 @@ public interface BlogRoutes {
 	
 	String BLOG = "/api/blog";
 	
-	String SEARCH_BLOG = "/api/blog/:title";
+	String BLOG_WITH_TITLE = BLOG + "/:title";
+	
+	String BLOG_WITH_ID = BLOG + "/:id";
 	
 }

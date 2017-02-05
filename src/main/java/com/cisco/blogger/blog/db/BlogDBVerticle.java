@@ -30,7 +30,7 @@ public class BlogDBVerticle extends AbstractVerticle{
 		System.out.println("Strating Blog DB Verticle");
 		
 		// Add Topic Listeners
-		vertx.eventBus().consumer(BlogTopics.GET_BLOG, message -> {
+		vertx.eventBus().consumer(BlogTopics.GET_BLOG_BY_ID, message -> {
 			System.out.println("Blog Fetched = ");
 			processFetchBlog(message);
 		});
@@ -39,10 +39,9 @@ public class BlogDBVerticle extends AbstractVerticle{
 			createBlog(message);
 		});
 		
-		vertx.eventBus().consumer(BlogTopics.SEARCH_BLOG, message -> {
+		vertx.eventBus().consumer(BlogTopics.GET_BLOG_BY_TITLE, message -> {
 			System.out.println("Blog Searched = ");
 			searchBlog(message);
-			message.reply(true);
 		});
 		
 		vertx.eventBus().consumer(BlogTopics.UPDATE_BLOG, message -> {
@@ -58,23 +57,6 @@ public class BlogDBVerticle extends AbstractVerticle{
 		
 	}
 
-	private void searchBlog(Message<Object> message) {
-		String title = message.body().toString();
-		System.out.println("BlogDBVerticle.processFetchBlog()"+title);
-		//String finalStr="/.*"+title+".*/";
-	//	System.out.println("BlogDBVerticle.searchBlog() finalStr "+finalStr);
-		BasicDAO<Blog, String> dao = new BasicDAO<>(Blog.class, datatstore);
-		List<Blog> retreivedBlogs=dao.createQuery().field("title").containsIgnoreCase(title).asList();
-		System.out.println("BlogDBVerticle.processFetchBlog() retreivedBlog "+retreivedBlogs);
-		if(retreivedBlogs==null){
-			message.reply("Blog Doesn't Exist");
-		}else{
-			message.reply(Json.encodePrettily(retreivedBlogs));
-			
-		}
-		
-	}
-
 	private void processFetchBlog(Message<Object> message) {
 		String id = message.body().toString();
 		System.out.println("BlogDBVerticle.processFetchBlog()"+id);
@@ -87,26 +69,6 @@ public class BlogDBVerticle extends AbstractVerticle{
 			message.reply(Json.encodePrettily(retreivedBlog));
 			
 		}
-		
-	}
-
-	private void deleteBlog(Message<Object> message) {
-
-		String msgBody = message.body().toString();
-		Blog blog = Json.decodeValue(msgBody, Blog.class);
-		if(blog!=null){
-			System.out.println("deleteBlog id "+blog.getId());
-		}
-		BasicDAO<Blog, String> dao = new BasicDAO<>(Blog.class, datatstore);
-		Object blogId=dao.deleteByQuery(dao.createQuery().field(Mapper.ID_KEY).equal(blog.getId()));
-				if(blogId==null){
-			message.reply("No blog delted");
-		}else{
-			System.out.println("Blog deleted = ");
-			System.out.println("BlogDBVerticle.delete  blogId "+blogId);
-			message.reply(Json.encodePrettily(blogId));
-		}
-	
 		
 	}
 
@@ -129,6 +91,35 @@ public class BlogDBVerticle extends AbstractVerticle{
 			System.out.println("BlogDBVerticle.createBlog() blogId "+blogId);
 			message.reply(Json.encodePrettily(blogId));
 		}
+	}
+
+	private void searchBlog(Message<Object> message) {
+		String title = message.body().toString();
+		System.out.println("BlogDBVerticle.processFetchBlog()"+title);
+		BasicDAO<Blog, String> dao = new BasicDAO<>(Blog.class, datatstore);
+		List<Blog> retreivedBlogs=dao.createQuery().field("title").containsIgnoreCase(title).asList();
+		System.out.println("BlogDBVerticle.processFetchBlog() retreivedBlog "+retreivedBlogs);
+		if(retreivedBlogs==null){
+			message.reply("Blog Doesn't Exist");
+		}else{
+			message.reply(Json.encodePrettily(retreivedBlogs));
+		}
+		
+	}
+
+	private void deleteBlog(Message<Object> message) {
+
+		String blogId = message.body().toString();
+		BasicDAO<Blog, String> dao = new BasicDAO<>(Blog.class, datatstore);
+		Object deletedBlog = dao.deleteByQuery(dao.createQuery().field(Mapper.ID_KEY).equal(blogId));
+		if (deletedBlog == null) {
+			message.reply("No blog delted");
+		} else {
+			System.out.println("Blog deleted = ");
+			System.out.println("BlogDBVerticle.delete  blogId " + deletedBlog);
+			message.reply(Json.encodePrettily(deletedBlog));
+		}
+
 	}
 
 	@Override

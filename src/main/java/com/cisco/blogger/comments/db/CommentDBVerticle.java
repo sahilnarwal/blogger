@@ -33,7 +33,6 @@ public class CommentDBVerticle extends AbstractVerticle {
 			//Comment comment = Json.decodeValue(message.body().toString(), Comment.class);
 			System.out.println("Comment Fetched = ");
 			fetchComment(message);
-			message.reply(true);
 		});
 		
 		vertx.eventBus().consumer(CommentTopics.ADD_COMMENT, message -> {
@@ -54,10 +53,7 @@ public class CommentDBVerticle extends AbstractVerticle {
 			message.reply("No Comments");
 		}else{
 			message.reply(Json.encodePrettily(retreiveComments));
-			
 		}
-		
-		
 	}
 
 	private void createComment(Message<Object> message) {

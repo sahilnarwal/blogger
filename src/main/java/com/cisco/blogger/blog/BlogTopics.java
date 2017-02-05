@@ -2,11 +2,11 @@ package com.cisco.blogger.blog;
 
 public interface BlogTopics {
 
-	String GET_BLOG = "com.cisco.blogger.blog.fetch";
+	String GET_BLOG_BY_ID = "com.cisco.blogger.blog.fetch";
 	
 	String ADD_BLOG = "com.cisco.blogger.blog.add";
 	
-	String SEARCH_BLOG = "com.cisco.blogger.blog.search";
+	String GET_BLOG_BY_TITLE = "com.cisco.blogger.blog.search";
 	
 	String UPDATE_BLOG = "com.cisco.blogger.blog.update";
 	

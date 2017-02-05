@@ -2,8 +2,8 @@ package com.cisco.blogger.comments;
 
 public interface CommentRoutes {
 	
-	String COMMENT = "/api/blog/comment";
+	String COMMENT = "/api/comment";
 	
-	String SEARCH_COMMENT = "/api/:blog/comment";
+	String COMMENT_FOR_BLOG = COMMENT + "/:blogid";
 	
 }

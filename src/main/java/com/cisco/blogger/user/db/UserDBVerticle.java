@@ -34,50 +34,12 @@ public class UserDBVerticle extends AbstractVerticle {
 			//User user = Json.decodeValue(message.body().toString(), User.class);
 			System.out.println("User Fetched = ");
 			message.reply(true);
-			
-			/*LoginDTO loginData = Json.decodeValue(message.body().toString(), LoginDTO.class);
-			Blog blog = Json.decodeValue(message.body().toString(), Blog.class);
-			System.out.println(blog);
-			message.reply(true);
-			
-			
-			BasicDAO<User, String> dao = new BasicDAO<>(User.class, MongoService.getDataStore());
-			Query<User> query=dao.createQuery();
-			query.and(
-					query.criteria("username").equal(loginData.getUsername()),
-					query.criteria("pwd").equal(loginData.getPwd()));
-			User user =query.get();
-			if(user==null){
-				message.reply("No User Found");
-			}else{
-				message.reply(Json.encodePrettily(user));
-			}*/
 		});
 		
 		vertx.eventBus().consumer(UserTopics.ADD_USER, message -> {
 			//User user = Json.decodeValue(message.body().toString(), User.class);
 			System.out.println("User Added = ");
 			processAddUser(message);
-			
-			/*User regData = Json.decodeValue(message.body().toString(), User.class);
-			if(regData!=null){
-				System.out.println("UserVerticle.start()getFullName "+regData.getFullName());
-				System.out.println("UserVerticle.start()pwd "+regData.getPwd());
-				System.out.println("UserVerticle.start() usrName"+regData.getUsername());
-			}
-			BasicDAO<User, String> dao = new BasicDAO<>(User.class, MongoService.getDataStore());
-			dao.save(regData);
-			Query<UserDetail> query=dao.createQuery();
-			query.
-			query.and(
-					query.criteria("username").equal(loginData.getUsername()),
-					query.criteria("pwd").equal(loginData.getPwd()));
-			Object user =dao.save(regData).getId();query.get();
-			if(user==null){
-				message.reply("No User created");
-			}else{
-				message.reply(Json.encodePrettily(user));
-			}*/
 			
 		});
 		

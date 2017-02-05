@@ -29,10 +29,10 @@ public class CommentVerticle extends AbstractVerticle{
 	}
 
 	private void registerGetCommentRoute(Router router) {
-		router.get(CommentRoutes.SEARCH_COMMENT).handler(rctx -> {
-			String title = rctx.request().getParam("blog");
-			System.out.println("Blog title to search comments for="+title);
-			vertx.eventBus().send(CommentTopics.GET_COMMENT, title, r -> {
+		router.get(CommentRoutes.COMMENT_FOR_BLOG).handler(rctx -> {
+			String blogId = rctx.request().getParam("blogid");
+			System.out.println("Blog title to search comments for="+blogId);
+			vertx.eventBus().send(CommentTopics.GET_COMMENT, blogId, r -> {
 				rctx.response().setStatusCode(200).end(r.result().body().toString());
 			});
 		});

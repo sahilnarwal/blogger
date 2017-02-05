@@ -18,19 +18,7 @@ public class BlogVerticle extends AbstractVerticle{
 		registerAddBlogRoute(router);
 		registerSearchBlogRoute(router);
 		registerDeleteBlogRoute(router);
-		
 		registerGetBlogRoute(router);
-		
-		
-	}
-
-	private void registerDeleteBlogRoute(Router router) {
-		router.route(BlogRoutes.BLOG).handler(BodyHandler.create());
-		router.delete(BlogRoutes.BLOG).handler(rctx -> {
-			vertx.eventBus().send(BlogTopics.DELETE_BLOG, rctx.getBodyAsJson(), r -> {
-				rctx.response().setStatusCode(200).end(r.result().body().toString());
-			});
-		});
 		
 	}
 
@@ -43,23 +31,33 @@ public class BlogVerticle extends AbstractVerticle{
 		});
 	}
 
-	private void registerGetBlogRoute(Router router) {
-		System.out.println("BlogVerticle.registerGetBlogRoute()");
-		router.get(BlogRoutes.BLOG).handler(rctx -> {
-		String id=	rctx.request().getHeader("id");
-		System.out.println("BlogVerticle.registerGetBlogRoute() id "+id);
-		
-			vertx.eventBus().send(BlogTopics.GET_BLOG, id, r -> {
+	private void registerSearchBlogRoute(Router router) {
+		router.get(BlogRoutes.BLOG_WITH_TITLE).handler(rctx -> {
+			String title = rctx.request().getParam("title");
+			System.out.println("BlogVerticle.registerSearchBlogRoute() title "+title);
+			vertx.eventBus().send(BlogTopics.GET_BLOG_BY_TITLE, title, r -> {
 				rctx.response().setStatusCode(200).end(r.result().body().toString());
 			});
 		});
 	}
 
-	private void registerSearchBlogRoute(Router router) {
-		router.get(BlogRoutes.SEARCH_BLOG).handler(rctx -> {
-			String title = rctx.request().getParam("title");
-			System.out.println("BlogVerticle.registerSearchBlogRoute() title "+title);
-			vertx.eventBus().send(BlogTopics.SEARCH_BLOG, title, r -> {
+	private void registerDeleteBlogRoute(Router router) {
+		router.delete(BlogRoutes.BLOG_WITH_ID).handler(rctx -> {
+			String blogId = rctx.request().getParam("id");
+			System.out.println("BlogVerticle.registerDeleteBlogRoute() id "+blogId);
+			vertx.eventBus().send(BlogTopics.DELETE_BLOG, blogId, r -> {
+				rctx.response().setStatusCode(200).end(r.result().body().toString());
+			});
+		});
+		
+	}
+
+	private void registerGetBlogRoute(Router router) {
+		System.out.println("BlogVerticle.registerGetBlogRoute()");
+		router.get(BlogRoutes.BLOG_WITH_ID).handler(rctx -> {
+		String blogId=	rctx.request().getParam("id");
+		System.out.println("BlogVerticle.registerGetBlogRoute() id "+blogId);
+			vertx.eventBus().send(BlogTopics.GET_BLOG_BY_ID, blogId, r -> {
 				rctx.response().setStatusCode(200).end(r.result().body().toString());
 			});
 		});
