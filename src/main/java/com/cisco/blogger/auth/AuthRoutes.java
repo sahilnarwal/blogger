@@ -2,6 +2,6 @@ package com.cisco.blogger.auth;
 
 public interface AuthRoutes {
 	
-	String LOGIN = "/api/user/login";
+	String REGISTER = "/api/user/register";
 	
 }

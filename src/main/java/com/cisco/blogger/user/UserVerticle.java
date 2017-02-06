@@ -16,13 +16,10 @@ public class UserVerticle extends AbstractVerticle {
 		// Add User UserRoutes
 		registerUserRegistrationRoute(router);
 		
-		registerUserLoginRoute(router);
-		
 		registerUserUpdateRoute(router);
 	}
 	
 	private void registerUserUpdateRoute(Router router) {
-
 		router.route(UserRoutes.USER).handler(BodyHandler.create());
 		router.put(UserRoutes.USER).handler(rctx -> {
 			vertx.eventBus().send(UserTopics.UPDATE_USER, rctx.getBodyAsJson(), r -> {
@@ -32,20 +29,11 @@ public class UserVerticle extends AbstractVerticle {
 	
 	}
 
-	private void registerUserLoginRoute(Router router) {
-		router.route(UserRoutes.LOGIN).handler(BodyHandler.create());
-		router.post(UserRoutes.LOGIN).handler(rctx -> {
-			vertx.eventBus().send(UserTopics.GET_USER, rctx.getBodyAsJson(), r -> {
-				rctx.response().setStatusCode(200).end(r.result().body().toString());
-			});
-		});
-	}
-
 	private void registerUserRegistrationRoute(Router router) {
 		router.route(UserRoutes.USER).handler(BodyHandler.create());
 		router.post(UserRoutes.USER).handler(rctx -> {
-			String name = rctx.request().getParam("name");
-			String pwd = rctx.request().getParam("pwd");
+			//String name = rctx.request().getParam("name");
+			//String pwd = rctx.request().getParam("pwd");
 			vertx.eventBus().send(UserTopics.ADD_USER, rctx.getBodyAsJson(), r -> {
 				rctx.response().setStatusCode(200).end(r.result().body().toString());
 			});

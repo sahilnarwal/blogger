@@ -54,15 +54,14 @@ public class UserDBVerticle extends AbstractVerticle {
 	private void processUpdateUser(Message<Object> message) {
 		User regData = Json.decodeValue(message.body().toString(), User.class);
 		if(regData!=null){
-			System.out.println("getFullName "+regData.getFullName());
-			System.out.println("pwd "+regData.getPwd());
+			System.out.println("getFullName "+regData.getName());
 			System.out.println(" usrName"+regData.getUsername());
 		}
 		BasicDAO<User, String> dao = new BasicDAO<>(User.class, datatstore);
 		Query<User> query=dao.createQuery();
 		query.and(
 				query.criteria("username").equal(regData.getUsername()));
-	UpdateOperations<User>	update=dao.createUpdateOperations().set("fullName", regData.getFullName()).set("pwd", regData.getPwd());
+	UpdateOperations<User>	update=dao.createUpdateOperations().set("fullName", regData.getName());
 		int updatedCount = dao.updateFirst(query, update).getUpdatedCount();
 		System.out.println("UserDBVerticle.processUpdateUser()updatedCount"+updatedCount);
 		if( updatedCount==1){
@@ -76,8 +75,7 @@ public class UserDBVerticle extends AbstractVerticle {
 	private void processAddUser(Message<Object> message) {
 		User regData = Json.decodeValue(message.body().toString(), User.class);
 		if(regData!=null){
-			System.out.println("getFullName "+regData.getFullName());
-			System.out.println("pwd "+regData.getPwd());
+			System.out.println("getFullName "+regData.getName());
 			System.out.println(" usrName"+regData.getUsername());
 		}
 		BasicDAO<User, String> dao = new BasicDAO<>(User.class, datatstore);
@@ -93,17 +91,14 @@ public class UserDBVerticle extends AbstractVerticle {
 		User userDetail = Json.decodeValue(message.body().toString(), User.class);
 		BasicDAO<User, String> dao = new BasicDAO<>(User.class, datatstore);
 		System.out.println("UserDBVerticle.getUserDetails() getUsername  "+userDetail.getUsername());
-		System.out.println("UserDBVerticle.getUserDetails() getPwd  "+userDetail.getPwd());
 		Query<User> query=dao.createQuery();
-		query.and(
-				query.criteria("username").equal(userDetail.getUsername()),
-				query.criteria("pwd").equal(userDetail.getPwd()));
+		query.and(query.criteria("username").equal(userDetail.getUsername()));
 		User user =query.get();
 		
 		if(user==null){
 			message.reply("No User Found");
 		}else{
-			System.out.println("UserDBVerticle.getUserDetails()"+user.getFullName());
+			System.out.println("UserDBVerticle.getUserDetails()"+user.getName());
 			message.reply(Json.encodePrettily(user));
 		}
 	}

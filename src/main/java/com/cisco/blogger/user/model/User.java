@@ -1,5 +1,7 @@
 package com.cisco.blogger.user.model;
 
+import java.util.Arrays;
+
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
@@ -9,39 +11,48 @@ public class User {
 
 	@Id
 	private String id = new ObjectId().toString();
-	
+	private String name;
 	private String username;
-	private String pwd;
-	private String fullName;
-	
-	
+	private String email;
+	private long phoneNumber;
+	private String[] areaOfInterest;
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
 	public String getUsername() {
 		return username;
 	}
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public String getPwd() {
-		return pwd;
+	public String getEmail() {
+		return email;
 	}
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
+	public void setEmail(String email) {
+		this.email = email;
 	}
-	public String getFullName() {
-		return fullName;
+	public long getPhoneNumber() {
+		return phoneNumber;
 	}
-	public void setFullName(String fullname) {
-		this.fullName = fullname;
+	public void setPhoneNumber(long phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
-	
+	public String[] getAreaOfInterest() {
+		return areaOfInterest;
+	}
+	public void setAreaOfInterest(String[] areaOfInterest) {
+		this.areaOfInterest = areaOfInterest;
+	}
 	public String getId() {
 		return id;
 	}
-	
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return "UserDetail  username "+username+",fullname "+", pwd "+pwd;
+		return "User [id=" + id + ", name=" + name + ", username=" + username + ", email="
+				+ email + ", phoneNumber=" + phoneNumber + ", areaOfInterest=" + Arrays.toString(areaOfInterest) + "]";
 	}
-	
+
 }

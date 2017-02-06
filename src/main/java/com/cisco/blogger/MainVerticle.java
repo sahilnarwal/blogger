@@ -1,6 +1,7 @@
 package com.cisco.blogger;
 
-import com.cisco.blogger.auth.LoginVerticle;
+import com.cisco.blogger.auth.AuthVerticle;
+import com.cisco.blogger.auth.db.AuthDBVerticle;
 import com.cisco.blogger.blog.BlogVerticle;
 import com.cisco.blogger.blog.db.BlogDBVerticle;
 import com.cisco.blogger.comments.CommentVerticle;
@@ -15,9 +16,6 @@ import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.net.JksOptions;
 import io.vertx.ext.web.Router;
-import io.vertx.ext.web.handler.AuthHandler;
-import io.vertx.ext.web.handler.FormLoginHandler;
-import io.vertx.ext.web.handler.RedirectAuthHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 
 public class MainVerticle extends AbstractVerticle {
@@ -35,7 +33,8 @@ public class MainVerticle extends AbstractVerticle {
 		vertx.deployVerticle(BlogDBVerticle.class.getName(), new DeploymentOptions().setWorker(true));
 		vertx.deployVerticle(UserDBVerticle.class.getName(), new DeploymentOptions().setWorker(true));
 		vertx.deployVerticle(CommentDBVerticle.class.getName(), new DeploymentOptions().setWorker(true));
-		vertx.deployVerticle(LoginVerticle.class.getName());
+		vertx.deployVerticle(AuthDBVerticle.class.getName(), new DeploymentOptions().setWorker(true));
+		vertx.deployVerticle(AuthVerticle.class.getName());
 		vertx.deployVerticle(UserVerticle.class.getName());
 		vertx.deployVerticle(BlogVerticle.class.getName());
 		vertx.deployVerticle(CommentVerticle.class.getName());
