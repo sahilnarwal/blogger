@@ -1,15 +1,14 @@
-package com.cisco.blogger.verticles;
+package com.cisco.blogger.user.db;
 
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.dao.BasicDAO;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
-import org.mongodb.morphia.query.UpdateResults;
 
-import com.cisco.blogger.model.User;
+import com.cisco.blogger.user.UserTopics;
+import com.cisco.blogger.user.model.User;
 import com.mongodb.MongoClient;
-import com.mongodb.WriteConcern;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.eventbus.Message;
@@ -30,59 +29,21 @@ public class UserDBVerticle extends AbstractVerticle {
 		
 		System.out.println("Strating User DB Verticle");
 		
-		vertx.eventBus().consumer(Topics.GET_USER, message -> {
+		vertx.eventBus().consumer(UserTopics.GET_USER, message -> {
 			getUserDetails(message);
 			//User user = Json.decodeValue(message.body().toString(), User.class);
 			System.out.println("User Fetched = ");
 			message.reply(true);
-			
-			/*LoginDTO loginData = Json.decodeValue(message.body().toString(), LoginDTO.class);
-			Blog blog = Json.decodeValue(message.body().toString(), Blog.class);
-			System.out.println(blog);
-			message.reply(true);
-			
-			
-			BasicDAO<User, String> dao = new BasicDAO<>(User.class, MongoService.getDataStore());
-			Query<User> query=dao.createQuery();
-			query.and(
-					query.criteria("username").equal(loginData.getUsername()),
-					query.criteria("pwd").equal(loginData.getPwd()));
-			User user =query.get();
-			if(user==null){
-				message.reply("No User Found");
-			}else{
-				message.reply(Json.encodePrettily(user));
-			}*/
 		});
 		
-		vertx.eventBus().consumer(Topics.ADD_USER, message -> {
+		vertx.eventBus().consumer(UserTopics.ADD_USER, message -> {
 			//User user = Json.decodeValue(message.body().toString(), User.class);
 			System.out.println("User Added = ");
 			processAddUser(message);
 			
-			/*User regData = Json.decodeValue(message.body().toString(), User.class);
-			if(regData!=null){
-				System.out.println("UserVerticle.start()getFullName "+regData.getFullName());
-				System.out.println("UserVerticle.start()pwd "+regData.getPwd());
-				System.out.println("UserVerticle.start() usrName"+regData.getUsername());
-			}
-			BasicDAO<User, String> dao = new BasicDAO<>(User.class, MongoService.getDataStore());
-			dao.save(regData);
-			Query<UserDetail> query=dao.createQuery();
-			query.
-			query.and(
-					query.criteria("username").equal(loginData.getUsername()),
-					query.criteria("pwd").equal(loginData.getPwd()));
-			Object user =dao.save(regData).getId();query.get();
-			if(user==null){
-				message.reply("No User created");
-			}else{
-				message.reply(Json.encodePrettily(user));
-			}*/
-			
 		});
 		
-		vertx.eventBus().consumer(Topics.UPDATE_USER, message -> {
+		vertx.eventBus().consumer(UserTopics.UPDATE_USER, message -> {
 			//User user = Json.decodeValue(message.body().toString(), User.class);
 			System.out.println("User updated = ");
 			processUpdateUser(message);
@@ -93,16 +54,14 @@ public class UserDBVerticle extends AbstractVerticle {
 	private void processUpdateUser(Message<Object> message) {
 		User regData = Json.decodeValue(message.body().toString(), User.class);
 		if(regData!=null){
-			System.out.println("getFullName "+regData.getFullName());
-			System.out.println("pwd "+regData.getPwd());
+			System.out.println("getFullName "+regData.getName());
 			System.out.println(" usrName"+regData.getUsername());
 		}
 		BasicDAO<User, String> dao = new BasicDAO<>(User.class, datatstore);
 		Query<User> query=dao.createQuery();
 		query.and(
 				query.criteria("username").equal(regData.getUsername()));
-		UpdateOperations<User> update = dao.createUpdateOperations().set("fullName", regData.getFullName())
-				.set("pwd", regData.getPwd()).set("areaOfInterest", regData.getAreaOfInterest());
+	UpdateOperations<User>	update=dao.createUpdateOperations().set("fullName", regData.getName());
 		int updatedCount = dao.updateFirst(query, update).getUpdatedCount();
 		System.out.println("UserDBVerticle.processUpdateUser()updatedCount"+updatedCount);
 		if( updatedCount==1){
@@ -116,10 +75,8 @@ public class UserDBVerticle extends AbstractVerticle {
 	private void processAddUser(Message<Object> message) {
 		User regData = Json.decodeValue(message.body().toString(), User.class);
 		if(regData!=null){
-			System.out.println("getFullName "+regData.getFullName());
-			System.out.println("pwd "+regData.getPwd());
+			System.out.println("getFullName "+regData.getName());
 			System.out.println(" usrName"+regData.getUsername());
-			System.out.println(" areofIntrest "+regData.getAreaOfInterest());
 		}
 		BasicDAO<User, String> dao = new BasicDAO<>(User.class, datatstore);
 		Object user=dao.save(regData).getId();
@@ -134,17 +91,14 @@ public class UserDBVerticle extends AbstractVerticle {
 		User userDetail = Json.decodeValue(message.body().toString(), User.class);
 		BasicDAO<User, String> dao = new BasicDAO<>(User.class, datatstore);
 		System.out.println("UserDBVerticle.getUserDetails() getUsername  "+userDetail.getUsername());
-		System.out.println("UserDBVerticle.getUserDetails() getPwd  "+userDetail.getPwd());
 		Query<User> query=dao.createQuery();
-		query.and(
-				query.criteria("username").equal(userDetail.getUsername()),
-				query.criteria("pwd").equal(userDetail.getPwd()));
+		query.and(query.criteria("username").equal(userDetail.getUsername()));
 		User user =query.get();
 		
 		if(user==null){
 			message.reply("No User Found");
 		}else{
-			System.out.println("UserDBVerticle.getUserDetails()"+user.getFullName());
+			System.out.println("UserDBVerticle.getUserDetails()"+user.getName());
 			message.reply(Json.encodePrettily(user));
 		}
 	}

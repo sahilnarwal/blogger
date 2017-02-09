@@ -4,11 +4,15 @@
   "scripts": {
   },
   "env": {
+  	"MAVEN_CUSTOM_OPTS": {
+            "description": "Custom Maven options for the buildpack",
+            "value": "-DskipTests -pl blogger"
+        }
   },
   "formation": {
   },
   "addons": [
-
+	"heroku-postgresql"
   ],
   "buildpacks": [
 

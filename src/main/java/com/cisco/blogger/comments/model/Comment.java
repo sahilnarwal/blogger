@@ -1,7 +1,7 @@
-package com.cisco.blogger.model;
+package com.cisco.blogger.comments.model;
 
 
-import java.util.Date;
+import java.time.Instant;
 
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
@@ -11,7 +11,6 @@ public class Comment {
 	
 	@Id
 	private String id = new ObjectId().toString();
-	
 
 	private String blogId;
 	
@@ -19,7 +18,7 @@ public class Comment {
 	
 	private String comment;
 	
-	private Date dateOfCreation = new Date();
+	private Instant dateOfCreation = Instant.now();
 
 	public String getBlogId() {
 		return blogId;
@@ -49,9 +48,15 @@ public class Comment {
 	public String getId(){
 		return id;
 	}
-	
+
+	public Instant getDateOfCreation() {
+		return dateOfCreation;
+	}
+
 	@Override
 	public String toString() {
-		return "Comment [comment=" + comment + ", blogid=" + blogId + "user "+userName+"]";
-		}
+		return "Comment [id=" + id + ", blogId=" + blogId + ", userName=" + userName + ", comment=" + comment
+				+ ", dateOfCreation=" + dateOfCreation + "]";
+	}
+	
 }

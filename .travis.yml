@@ -4,5 +4,6 @@ jdk:
 script: mvn clean package
 deploy:
   provider: heroku
+  app : blogger-cmad
   api_key:
     secure: b45be159-3697-4e2c-8569-a05497bc134c

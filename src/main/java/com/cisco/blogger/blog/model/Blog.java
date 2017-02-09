@@ -1,6 +1,7 @@
-package com.cisco.blogger.model;
+package com.cisco.blogger.blog.model;
 
-import java.util.Date;
+import java.time.Instant;
+import java.util.Arrays;
 
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
@@ -11,8 +12,6 @@ public class Blog {
 	
 	@Id
 	private String id = new ObjectId().toString();
-	
-	
 
 	private String title;
 	
@@ -20,9 +19,9 @@ public class Blog {
 	
 	private String content;
 	
-	private Date timeOfCreation ;
+	private Instant timeOfCreation;
 	
-	private Date updateDate;
+	private Instant updateDate;
 	
 	private String author;
 	
@@ -72,20 +71,35 @@ public class Blog {
 	public String getId() {
 		return id;
 	}
+
+	public Instant getTimeOfCreation() {
+		return timeOfCreation;
+	}
+
+	public void setTimeOfCreation(Instant timeOfCreation) {
+		this.timeOfCreation = timeOfCreation;
+	}
 	
+	public Instant getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Instant updateDate) {
+		this.updateDate = updateDate;
+	}
+
 	@PrePersist
 	public void prePersist() {
 		System.out.println("Blog.prePersist() timeOfCreation "+timeOfCreation);
 		System.out.println("Blog.prePersist() updateDate "+updateDate);
-		timeOfCreation = (timeOfCreation == null) ? new Date() : timeOfCreation;
-	    updateDate = (updateDate == null) ? timeOfCreation : new Date();
+		timeOfCreation = (timeOfCreation == null) ? Instant.now() : timeOfCreation;
+	    updateDate = (updateDate == null) ? timeOfCreation : Instant.now();
 	}
+
 	@Override
 	public String toString() {
-		return "Blog [title=" + title + ", content=" + content + "id "+id+"]";
+		return "Blog [id=" + id + ", title=" + title + ", tags=" + Arrays.toString(tags) + ", content=" + content
+				+ ", timeOfCreation=" + timeOfCreation + ", updateDate=" + updateDate + ", author=" + author + "]";
 	}
-	
-	
-	
 
 }
