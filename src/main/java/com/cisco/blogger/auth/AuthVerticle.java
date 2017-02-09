@@ -35,7 +35,7 @@ public class AuthVerticle extends AbstractVerticle{
 		
 		// protect the API
         // Any requests to URI starting '/api/' require login
-        router.route("/api/*").handler(RedirectAuthHandler.create(provider, "/auth.html"));
+     //   router.route("/api/*").handler(RedirectAuthHandler.create(provider, "/auth.html"));
         
         router.route("/logout").handler(ctx -> {
             //ctx.clearUser();

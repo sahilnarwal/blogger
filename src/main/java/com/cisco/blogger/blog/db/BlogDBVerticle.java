@@ -21,7 +21,7 @@ import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.Json;
 
 public class BlogDBVerticle extends AbstractVerticle{
-	
+	  
 	private Datastore datatstore;
 	
 	public BlogDBVerticle() {
