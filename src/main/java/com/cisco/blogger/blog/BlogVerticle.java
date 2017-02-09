@@ -19,7 +19,27 @@ public class BlogVerticle extends AbstractVerticle{
 		registerSearchBlogRoute(router);
 		registerDeleteBlogRoute(router);
 		registerGetBlogRoute(router);
-		
+		registerUpdateBlogRoute(router);
+		registerFavBlogRoute(router);
+	}
+	
+	private void registerUpdateBlogRoute(Router router) {
+		router.route(BlogRoutes.BLOG).handler(BodyHandler.create());
+		router.put(BlogRoutes.BLOG).handler(rctx -> {
+			vertx.eventBus().send(BlogTopics.UPDATE_BLOG, rctx.getBodyAsJson(), r -> {
+				rctx.response().setStatusCode(200).end(r.result().body().toString());
+			});
+		});
+	}
+
+	private void registerFavBlogRoute(Router router) {
+		router.get(BlogRoutes.FAV_BLOG).handler(rctx -> {
+			String title = rctx.request().getParam("areaOfInterest");
+			System.out.println("BlogVerticle.registerSearchBlogRoute() title "+title);
+			vertx.eventBus().send(BlogTopics.FAV_BLOG, title, r -> {
+				rctx.response().setStatusCode(200).end(r.result().body().toString());
+			});
+		});
 	}
 
 	private void registerAddBlogRoute(Router router) {

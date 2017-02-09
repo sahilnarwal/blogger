@@ -6,6 +6,7 @@ import java.util.Arrays;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.PrePersist;
 @Entity
 public class Blog {
 	
@@ -18,7 +19,9 @@ public class Blog {
 	
 	private String content;
 	
-	private Instant timeOfCreation = Instant.now();
+	private Instant timeOfCreation;
+	
+	private Instant updateDate;
 	
 	private String author;
 	
@@ -76,11 +79,27 @@ public class Blog {
 	public void setTimeOfCreation(Instant timeOfCreation) {
 		this.timeOfCreation = timeOfCreation;
 	}
+	
+	public Instant getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Instant updateDate) {
+		this.updateDate = updateDate;
+	}
+
+	@PrePersist
+	public void prePersist() {
+		System.out.println("Blog.prePersist() timeOfCreation "+timeOfCreation);
+		System.out.println("Blog.prePersist() updateDate "+updateDate);
+		timeOfCreation = (timeOfCreation == null) ? Instant.now() : timeOfCreation;
+	    updateDate = (updateDate == null) ? timeOfCreation : Instant.now();
+	}
 
 	@Override
 	public String toString() {
 		return "Blog [id=" + id + ", title=" + title + ", tags=" + Arrays.toString(tags) + ", content=" + content
-				+ ", timeOfCreation=" + timeOfCreation + ", author=" + author + "]";
+				+ ", timeOfCreation=" + timeOfCreation + ", updateDate=" + updateDate + ", author=" + author + "]";
 	}
-	
+
 }

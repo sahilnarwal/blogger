@@ -12,4 +12,6 @@ public interface BlogTopics {
 	
 	String DELETE_BLOG = "com.cisco.blogger.blog.delete";
 	
+	String FAV_BLOG = "com.cisco.blogger.blog.fav";
+	
 }
