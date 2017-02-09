@@ -1,6 +1,6 @@
 <html>
 <head>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 <body>
 
@@ -26,7 +26,7 @@
     $(document).ready(function () {
         $('#generateToken').on('click', function () {
             $.ajax({
-                url: '/api/newToken',
+                url: '/api/new_token',
                 dataType: 'text',
                 success: function (text) {
                     $('#token').html('Current Token: ' + text);

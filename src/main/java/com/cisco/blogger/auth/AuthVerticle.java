@@ -50,7 +50,7 @@ public class AuthVerticle extends AbstractVerticle{
 			//String cred = rctx.request().getHeader("Authorization");
 			//System.out.println("Authentication headers"+cred);
 			vertx.eventBus().send(AuthTopics.NEW_TOKEN, "", res -> {
-				rctx.response().setStatusCode(200).end("issued new tokem"+res.result().body().toString());
+				rctx.response().setStatusCode(200).end(res.result().body().toString());
 			});
 		});
 		
@@ -60,15 +60,6 @@ public class AuthVerticle extends AbstractVerticle{
 			String token = authHeader.split(" ")[1];
 			vertx.eventBus().send(AuthTopics.AUTHORIZE, token, res -> {
 				rctx.response().setStatusCode(200).end("Token Validated	"+res.result().body().toString());
-			});
-		});
-		
-		router.route(AuthRoutes.TEST_USER_AUTHENTICATION).handler(BodyHandler.create());
-		router.post(AuthRoutes.TEST_USER_AUTHENTICATION).handler(rctx -> {
-			//String cred = rctx.request().getHeader("Authorization");
-			//System.out.println("Authentication headers"+cred);
-			vertx.eventBus().send(AuthTopics.AUNTHENTICATE, rctx.getBodyAsJson(), r -> {
-				rctx.response().setStatusCode(200).end("User Authenticated");
 			});
 		});
 		
