@@ -8,6 +8,6 @@ public interface BlogRoutes {
 	
 	String BLOG_WITH_ID = BLOG + "/:id";
 	
-	String FAV_BLOG="/api/:areaOfInterest/blog";
+	String FAV_BLOG = BLOG +"/:areaOfInterest";
 	
 }

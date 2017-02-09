@@ -11,7 +11,7 @@ import io.vertx.ext.auth.jwt.JWTOptions;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CookieHandler;
-import io.vertx.ext.web.handler.RedirectAuthHandler;
+import io.vertx.ext.web.handler.JWTAuthHandler;
 import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
 
@@ -33,40 +33,42 @@ public class AuthVerticle extends AbstractVerticle{
 
 		JWTAuth provider = JWTAuth.create(vertx, config);
 		
-		// protect the API
-        // Any requests to URI starting '/api/' require login
-        router.route("/api/*").handler(RedirectAuthHandler.create(provider, "/auth.html"));
-        
-        router.route("/logout").handler(ctx -> {
-            //ctx.clearUser();
-            //How to invalidate the Token
-            // Redirect back to the index page
-            ctx.response().putHeader("location", "/").setStatusCode(302).end();
-        });
 		
+		router.route("/api/*").handler(JWTAuthHandler.create(provider, AuthRoutes.GET_TOKEN));
+        
+      
 		router.route(AuthRoutes.REGISTER).handler(BodyHandler.create());
-		router.route(AuthRoutes.REGISTER).handler(rctx -> {
+		router.post(AuthRoutes.REGISTER).handler(rctx -> {
 			//String cred = rctx.request().getHeader("Authorization");
 			//System.out.println("Authentication headers"+cred);
-			vertx.eventBus().send(AuthTopics.ADD_USER_CRED, rctx.getBodyAsJson(), r -> {
+			vertx.eventBus().send(AuthTopics.ADD_USER_CRED, rctx.getBodyAsJson(), res -> {
 				rctx.response().setStatusCode(200).end("User Added");
 			});
 		});
 		
-		router.route(AuthRoutes.TEST_GET_TOKEN).handler(rctx -> {
+		router.get(AuthRoutes.GET_TOKEN).handler(rctx -> {
 			//String cred = rctx.request().getHeader("Authorization");
 			//System.out.println("Authentication headers"+cred);
-			vertx.eventBus().send(AuthTopics.NEW_TOKEN, "", r -> {
-				rctx.response().setStatusCode(200).end("issued new tokem"+r.result().body().toString());
+			vertx.eventBus().send(AuthTopics.NEW_TOKEN, "", res -> {
+				rctx.response().setStatusCode(200).end("issued new tokem"+res.result().body().toString());
 			});
 		});
 		
-		router.route(AuthRoutes.TEST_TOKEN_VALIDATION).handler(rctx -> {
+		router.post(AuthRoutes.TEST_TOKEN_VALIDATION).handler(rctx -> {
 			String authHeader = rctx.request().getHeader("Authorization");
 			System.out.println("Authentication headers"+authHeader);
 			String token = authHeader.split(" ")[1];
 			vertx.eventBus().send(AuthTopics.AUTHORIZE, token, res -> {
 				rctx.response().setStatusCode(200).end("Token Validated	"+res.result().body().toString());
+			});
+		});
+		
+		router.route(AuthRoutes.TEST_USER_AUTHENTICATION).handler(BodyHandler.create());
+		router.post(AuthRoutes.TEST_USER_AUTHENTICATION).handler(rctx -> {
+			//String cred = rctx.request().getHeader("Authorization");
+			//System.out.println("Authentication headers"+cred);
+			vertx.eventBus().send(AuthTopics.AUNTHENTICATE, rctx.getBodyAsJson(), r -> {
+				rctx.response().setStatusCode(200).end("User Authenticated");
 			});
 		});
 		
@@ -93,14 +95,6 @@ public class AuthVerticle extends AbstractVerticle{
 			//	}
 		});
 		
-		router.route(AuthRoutes.TEST_USER_AUTHENTICATION).handler(BodyHandler.create());
-		router.route(AuthRoutes.TEST_USER_AUTHENTICATION).handler(rctx -> {
-			//String cred = rctx.request().getHeader("Authorization");
-			//System.out.println("Authentication headers"+cred);
-			vertx.eventBus().send(AuthTopics.AUNTHENTICATE, rctx.getBodyAsJson(), r -> {
-				rctx.response().setStatusCode(200).end("User Authenticated");
-			});
-		});
 	}
 
 	@Override

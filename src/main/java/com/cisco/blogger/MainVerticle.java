@@ -35,10 +35,10 @@ public class MainVerticle extends AbstractVerticle {
 		
 		// Deploy Verticles
 		vertx.deployVerticle(AuthVerticle.class.getName());
+		vertx.deployVerticle(AuthDBVerticle.class.getName(), new DeploymentOptions().setWorker(true));
 		vertx.deployVerticle(BlogDBVerticle.class.getName(), new DeploymentOptions().setWorker(true));
 		vertx.deployVerticle(UserDBVerticle.class.getName(), new DeploymentOptions().setWorker(true));
 		vertx.deployVerticle(CommentDBVerticle.class.getName(), new DeploymentOptions().setWorker(true));
-		vertx.deployVerticle(AuthDBVerticle.class.getName(), new DeploymentOptions().setWorker(true));
 		vertx.deployVerticle(UserVerticle.class.getName());
 		vertx.deployVerticle(BlogVerticle.class.getName());
 		vertx.deployVerticle(CommentVerticle.class.getName());
@@ -64,9 +64,9 @@ public class MainVerticle extends AbstractVerticle {
 		router.route(Routes.STATIC_CONTENT).handler(StaticHandler.create("webroot"));
 		
 		
-		router.route().handler(CookieHandler.create());
+		/*router.route().handler(CookieHandler.create());
 	    router.route().handler(BodyHandler.create());
-	    router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
+	    router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));*/
 		/*AuthHandler redirectAuthHandler = RedirectAuthHandler.create(authProvider);
 		router.route(Routes.SECURE_CONTENT).handler(redirectAuthHandler);
 		// Handle the actual login
