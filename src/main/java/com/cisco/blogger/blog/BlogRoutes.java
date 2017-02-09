@@ -6,7 +6,7 @@ public interface BlogRoutes {
 	
 	String BLOG_WITH_TITLE = BLOG + "/:title";
 	
-	String BLOG_WITH_ID = BLOG + "/:id";
+	String BLOG_WITH_ID = BLOG + "/id/:id";
 	
 	String FAV_BLOG = BLOG +"/:areaOfInterest";
 	
