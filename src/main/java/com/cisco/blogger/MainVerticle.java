@@ -16,7 +16,11 @@ import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.net.JksOptions;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.CookieHandler;
+import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.handler.StaticHandler;
+import io.vertx.ext.web.sstore.LocalSessionStore;
 
 public class MainVerticle extends AbstractVerticle {
 
@@ -30,11 +34,11 @@ public class MainVerticle extends AbstractVerticle {
 		registerGeneralRoutes(router);
 		
 		// Deploy Verticles
+		vertx.deployVerticle(AuthVerticle.class.getName());
 		vertx.deployVerticle(BlogDBVerticle.class.getName(), new DeploymentOptions().setWorker(true));
 		vertx.deployVerticle(UserDBVerticle.class.getName(), new DeploymentOptions().setWorker(true));
 		vertx.deployVerticle(CommentDBVerticle.class.getName(), new DeploymentOptions().setWorker(true));
 		vertx.deployVerticle(AuthDBVerticle.class.getName(), new DeploymentOptions().setWorker(true));
-		vertx.deployVerticle(AuthVerticle.class.getName());
 		vertx.deployVerticle(UserVerticle.class.getName());
 		vertx.deployVerticle(BlogVerticle.class.getName());
 		vertx.deployVerticle(CommentVerticle.class.getName());
@@ -57,8 +61,12 @@ public class MainVerticle extends AbstractVerticle {
 			response.putHeader("content-type", "text/html")
 					.end("<h1>Hello from my first Vert.x 3 application via routers</h1>");
 		});
-		router.route(Routes.STATIC_CONTENT).handler(StaticHandler.create("web"));
+		router.route(Routes.STATIC_CONTENT).handler(StaticHandler.create("webroot"));
 		
+		
+		router.route().handler(CookieHandler.create());
+	    router.route().handler(BodyHandler.create());
+	    router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 		/*AuthHandler redirectAuthHandler = RedirectAuthHandler.create(authProvider);
 		router.route(Routes.SECURE_CONTENT).handler(redirectAuthHandler);
 		// Handle the actual login

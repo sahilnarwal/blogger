@@ -1,5 +1,7 @@
 package com.cisco.blogger.auth;
 
+import java.util.ArrayList;
+
 import com.cisco.blogger.SharedRouter;
 
 import io.vertx.core.AbstractVerticle;
@@ -8,6 +10,10 @@ import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.jwt.JWTOptions;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.CookieHandler;
+import io.vertx.ext.web.handler.RedirectAuthHandler;
+import io.vertx.ext.web.handler.SessionHandler;
+import io.vertx.ext.web.sstore.LocalSessionStore;
 
 public class AuthVerticle extends AbstractVerticle{
 	
@@ -16,12 +22,27 @@ public class AuthVerticle extends AbstractVerticle{
 		System.out.println("Starting Auth Verticle");
 		Router router = SharedRouter.router;
 		
+		router.route().handler(CookieHandler.create());
+        router.route().handler(BodyHandler.create());
+        router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
+        
 		JsonObject config = new JsonObject().put("keyStore", new JsonObject()
 			    .put("path", "keystores/jwt-keystore.jceks")
 			    .put("type", "jceks")
 			    .put("password", "secret"));
 
 		JWTAuth provider = JWTAuth.create(vertx, config);
+		
+		// protect the API
+        // Any requests to URI starting '/api/' require login
+        router.route("/api/*").handler(RedirectAuthHandler.create(provider, "/auth.html"));
+        
+        router.route("/logout").handler(ctx -> {
+            //ctx.clearUser();
+            //How to invalidate the Token
+            // Redirect back to the index page
+            ctx.response().putHeader("location", "/").setStatusCode(302).end();
+        });
 		
 		router.route(AuthRoutes.REGISTER).handler(BodyHandler.create());
 		router.route(AuthRoutes.REGISTER).handler(rctx -> {
@@ -63,7 +84,8 @@ public class AuthVerticle extends AbstractVerticle{
 		vertx.eventBus().consumer(AuthTopics.NEW_TOKEN, message -> {
 			System.out.println("Issuing new token");
 			//f ("paulo".equals("username") && "super_secret".equals("password")) {
-				  String token = provider.generateToken(new JsonObject().put("sub", "paulo"), new JWTOptions().setAlgorithm("RS512"));
+			String token = provider.generateToken(new JsonObject().put("sub", "").put("role", ""), new JWTOptions()
+					.setAlgorithm("RS512").setExpiresInMinutes(Long.valueOf(120)).setPermissions(new ArrayList<>()));
 				  // now for any request to protected resources you should pass this string in the HTTP header Authorization as:
 				  // Authorization: Bearer <token>
 				  System.out.println("Token generated = "+token);
