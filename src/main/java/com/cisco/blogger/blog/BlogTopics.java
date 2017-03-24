@@ -14,4 +14,6 @@ public interface BlogTopics {
 	
 	String FAV_BLOG = "com.cisco.blogger.blog.fav";
 	
+	String GET_BLOGS = "com.cisco.blogger.blogs.fetch";
+	
 }

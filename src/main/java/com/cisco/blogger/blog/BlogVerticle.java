@@ -21,7 +21,9 @@ public class BlogVerticle extends AbstractVerticle{
 		registerGetBlogRoute(router);
 		registerUpdateBlogRoute(router);
 		registerFavBlogRoute(router);
+		registerGetAllBlogRoutes(router);
 	}
+	
 	
 	private void registerUpdateBlogRoute(Router router) {
 		router.route(BlogRoutes.BLOG).handler(BodyHandler.create());
@@ -43,6 +45,8 @@ public class BlogVerticle extends AbstractVerticle{
 	}
 
 	private void registerAddBlogRoute(Router router) {
+		
+		
 		router.route(BlogRoutes.BLOG).handler(BodyHandler.create());
 		router.post(BlogRoutes.BLOG).handler(rctx -> {
 			vertx.eventBus().send(BlogTopics.ADD_BLOG, rctx.getBodyAsJson(), r -> {
@@ -82,6 +86,25 @@ public class BlogVerticle extends AbstractVerticle{
 			});
 		});
 	}
+	
+	private void registerGetAllBlogRoutes(Router router) {
+		System.out.println("BlogVerticle.registerGetAllBlogRoutes()");
+				//router.route(Routes.BLOGS).handler(BodyHandler.create());
+				router.get(BlogRoutes.BLOGS).handler(rctx -> {
+					System.out.println("BlogVerticle.registerGetAllBlogRoutes() got call ");
+					
+					vertx.eventBus().send(BlogTopics.GET_BLOGS, rctx.getBodyAsJson(), r -> {
+						if(r.result()!=null ){
+							rctx.response().setStatusCode(200).end(r.result().body().toString());
+							}else{
+								rctx.response().setStatusCode(400).end(r.cause().getMessage());
+							}
+						
+						//rctx.response().setStatusCode(200).end(r.result().body().toString());
+					});
+				});
+				}
+
 
 	@Override
 	public void stop() throws Exception {

@@ -1,13 +1,17 @@
 package com.cisco.blogger.blog.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.TimeZone;
 
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.PrePersist;
-@Entity
+@Entity(noClassnameStored=true)
 public class Blog {
 	
 	@Id
@@ -19,9 +23,9 @@ public class Blog {
 	
 	private String content;
 	
-	private Instant timeOfCreation;
+	private String timeOfCreation;
 	
-	private Instant updateDate;
+	private String updateDate;
 	
 	private String author;
 	
@@ -72,19 +76,19 @@ public class Blog {
 		return id;
 	}
 
-	public Instant getTimeOfCreation() {
+	public String getTimeOfCreation() {
 		return timeOfCreation;
 	}
 
-	public void setTimeOfCreation(Instant timeOfCreation) {
+	public void setTimeOfCreation(String timeOfCreation) {
 		this.timeOfCreation = timeOfCreation;
 	}
 	
-	public Instant getUpdateDate() {
+	public String getUpdateDate() {
 		return updateDate;
 	}
 
-	public void setUpdateDate(Instant updateDate) {
+	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
 	}
 
@@ -92,8 +96,17 @@ public class Blog {
 	public void prePersist() {
 		System.out.println("Blog.prePersist() timeOfCreation "+timeOfCreation);
 		System.out.println("Blog.prePersist() updateDate "+updateDate);
-		timeOfCreation = (timeOfCreation == null) ? Instant.now() : timeOfCreation;
-	    updateDate = (updateDate == null) ? timeOfCreation : Instant.now();
+		timeOfCreation=(timeOfCreation == null) ? getFormateDate(Instant.now()) : timeOfCreation;
+		updateDate=(updateDate==null)?timeOfCreation:getFormateDate(Instant.now());
+	}
+
+	private String getFormateDate(Instant instant) {
+		long epoch= instant.getEpochSecond()*1000;
+		Date date = new Date(epoch);
+		DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		format.setTimeZone(TimeZone.getTimeZone("IST"));
+		String formatted = format.format(date);
+		return formatted;
 	}
 
 	@Override

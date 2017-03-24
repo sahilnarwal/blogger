@@ -62,8 +62,34 @@ public class BlogDBVerticle extends AbstractVerticle{
 			System.out.println("Fetch Fav Blog = ");
 			favBlog(message);
 		});
+		vertx.eventBus().consumer(BlogTopics.GET_BLOGS, message -> {
+			System.out.println(" AllBlog Fetched = ");
+			allBlogs(message);
+		});
+		
 		
 	}
+	
+	private void allBlogs(Message<Object> message) {
+
+		//String title = message.body().toString();
+		System.out.println("BlogDBVerticle.processFetchAllBlogs()");
+		//String finalStr="/.*"+title+".*/";
+	//	System.out.println("BlogDBVerticle.searchBlog() finalStr "+finalStr);
+		BasicDAO<Blog, String> dao = new BasicDAO<>(Blog.class, datatstore);
+		List<Blog> retreivedBlogs = dao.createQuery()
+				.order(Sort.descending("updateDate")).asList();
+		System.out.println("BlogDBVerticle.processFetchAllBlog "+retreivedBlogs);
+		if(retreivedBlogs==null){
+			message.fail(404, "No Blog Found");
+		}else{
+			message.reply(Json.encodePrettily(retreivedBlogs));
+			
+		}
+		
+		}
+
+
 	
 	private void updateBlog(Message<Object> message) {
 
@@ -153,7 +179,10 @@ public class BlogDBVerticle extends AbstractVerticle{
 		String title = message.body().toString();
 		System.out.println("BlogDBVerticle.processFetchBlog()"+title);
 		BasicDAO<Blog, String> dao = new BasicDAO<>(Blog.class, datatstore);
-		List<Blog> retreivedBlogs=dao.createQuery().field("title").containsIgnoreCase(title).asList();
+		Query<Blog> query = dao.createQuery();
+		query.or(query.criteria("title").equalIgnoreCase(title),
+				query.criteria("tags").hasThisOne(title));
+		List<Blog> retreivedBlogs=query.asList();/*query.field("title").containsIgnoreCase(title).asList();*/
 		System.out.println("BlogDBVerticle.processFetchBlog() retreivedBlog "+retreivedBlogs);
 		if(retreivedBlogs==null){
 			message.reply("Blog Doesn't Exist");

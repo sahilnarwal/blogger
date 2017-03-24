@@ -31,45 +31,50 @@ public class UserDBVerticle extends AbstractVerticle {
 		
 		vertx.eventBus().consumer(UserTopics.GET_USER, message -> {
 			getUserDetails(message);
-			//User user = Json.decodeValue(message.body().toString(), User.class);
 			System.out.println("User Fetched = ");
-			message.reply(true);
+		//	message.reply(true);
 		});
 		
 		vertx.eventBus().consumer(UserTopics.ADD_USER, message -> {
 			//User user = Json.decodeValue(message.body().toString(), User.class);
 			System.out.println("User Added = ");
 			processAddUser(message);
-			
 		});
 		
 		vertx.eventBus().consumer(UserTopics.UPDATE_USER, message -> {
-			//User user = Json.decodeValue(message.body().toString(), User.class);
 			System.out.println("User updated = ");
 			processUpdateUser(message);
-			message.reply(true);
+			//message.reply(true);
 		});
 	}
 
 	private void processUpdateUser(Message<Object> message) {
 		User regData = Json.decodeValue(message.body().toString(), User.class);
 		if(regData!=null){
+			System.out.println("UserDBVerticle.processUpdateUser()");
 			System.out.println("getFullName "+regData.getName());
+			System.out.println("id "+regData.getId());
+			System.out.println("pwd "+regData.getPwd());
 			System.out.println(" usrName"+regData.getUsername());
+			System.out.println(" areofIntrest "+regData.getAreaOfInterest());
+			System.out.println(" phoneNumber "+regData.getPhoneNumber());
+			System.out.println(" emailId "+regData.getEmail());
 		}
 		BasicDAO<User, String> dao = new BasicDAO<>(User.class, datatstore);
 		Query<User> query=dao.createQuery();
 		query.and(
 				query.criteria("username").equal(regData.getUsername()));
-	UpdateOperations<User>	update=dao.createUpdateOperations().set("name", regData.getName()).
-			set("username", regData.getUsername()).set("email", regData.getEmail())
-			.set("phoneNumber", regData.getPhoneNumber()).set("areaOfInterest", regData.getAreaOfInterest());
+		UpdateOperations<User> update = dao.createUpdateOperations().set("name", regData.getName())
+				.set("pwd", regData.getPwd()).set("areaOfInterest", regData.getAreaOfInterest()).
+				set("phoneNumber", regData.getPhoneNumber()).set("email", regData.getEmail());
 		int updatedCount = dao.updateFirst(query, update).getUpdatedCount();
 		System.out.println("UserDBVerticle.processUpdateUser()updatedCount"+updatedCount);
 		if( updatedCount==1){
-			message.reply(" User updated");
-		}else{    
-			message.reply(" User not updated ");   
+		//	message.reply(" User updated");
+			message.reply(Json.encodePrettily(regData));
+		}else{
+			message.fail(404, "User not updated");
+			//message.reply(" User not updated ");
 		}
 		
 	}
@@ -77,28 +82,43 @@ public class UserDBVerticle extends AbstractVerticle {
 	private void processAddUser(Message<Object> message) {
 		User regData = Json.decodeValue(message.body().toString(), User.class);
 		if(regData!=null){
+			System.out.println("UserDBVerticle.processAddUser()");
 			System.out.println("getFullName "+regData.getName());
+			System.out.println("pwd "+regData.getPwd());
 			System.out.println(" usrName"+regData.getUsername());
+			System.out.println(" areofIntrest "+regData.getAreaOfInterest());
+			System.out.println(" phoneNumber "+regData.getPhoneNumber());
+			System.out.println(" emailId "+regData.getEmail());
+			
 		}
 		BasicDAO<User, String> dao = new BasicDAO<>(User.class, datatstore);
-		Object user=dao.save(regData).getId();
+		Object user=dao.save(regData);
+		System.out.println("UserDBVerticle.processAddUser() user "+user);
 				if(user==null){
-			message.reply("No User created");
+					message.fail(404, "No User Created");
+			//message.reply("No User created");
 		}else{
-			message.reply(Json.encodePrettily(user));
+//			message.reply(Json.encodePrettily(user));
+			System.out.println("UserDBVerticle.processAddUser() regData = "+regData);
+			message.reply(Json.encodePrettily(regData));
 		}
 	}
 
 	private void getUserDetails(Message<Object> message) {
 		User userDetail = Json.decodeValue(message.body().toString(), User.class);
+		System.out.println("UserDBVerticle.getUserDetails() body "+message.body().toString());
+		System.out.println("UserDBVerticle.getUserDetails() user "+userDetail);
 		BasicDAO<User, String> dao = new BasicDAO<>(User.class, datatstore);
 		System.out.println("UserDBVerticle.getUserDetails() getUsername  "+userDetail.getUsername());
+		System.out.println("UserDBVerticle.getUserDetails() getPwd  "+userDetail.getPwd());
 		Query<User> query=dao.createQuery();
-		query.and(query.criteria("username").equal(userDetail.getUsername()));
+		query.and(
+				query.criteria("username").equal(userDetail.getUsername()),
+				query.criteria("pwd").equal(userDetail.getPwd()));
 		User user =query.get();
-		
 		if(user==null){
-			message.reply("No User Found");
+			message.fail(404, "No User Found");
+			//message.reply("No User Found");
 		}else{
 			System.out.println("UserDBVerticle.getUserDetails()"+user.getName());
 			message.reply(Json.encodePrettily(user));

@@ -34,17 +34,25 @@ public class MainVerticle extends AbstractVerticle {
 		registerGeneralRoutes(router);
 		
 		// Deploy Verticles
-		vertx.deployVerticle(AuthVerticle.class.getName());
+	//	vertx.deployVerticle(AuthVerticle.class.getName());
 		vertx.deployVerticle(BlogDBVerticle.class.getName(), new DeploymentOptions().setWorker(true));
 		vertx.deployVerticle(UserDBVerticle.class.getName(), new DeploymentOptions().setWorker(true));
 		vertx.deployVerticle(CommentDBVerticle.class.getName(), new DeploymentOptions().setWorker(true));
-		vertx.deployVerticle(AuthDBVerticle.class.getName(), new DeploymentOptions().setWorker(true));
+	//	vertx.deployVerticle(AuthDBVerticle.class.getName(), new DeploymentOptions().setWorker(true));
 		vertx.deployVerticle(UserVerticle.class.getName());
 		vertx.deployVerticle(BlogVerticle.class.getName());
 		vertx.deployVerticle(CommentVerticle.class.getName());
 		
 		// Start server and listen
-		vertx.createHttpServer(new HttpServerOptions().setSsl(true)
+		vertx.createHttpServer().requestHandler(router::accept).listen(config().getInteger("http.port", 9000),
+				result -> {
+					if (result.succeeded()) {
+						startFuture.complete();
+					} else {
+						startFuture.fail(result.cause());
+					}
+				});
+		/*vertx.createHttpServer(new HttpServerOptions().setSsl(true)
 				.setKeyStoreOptions(new JksOptions().setPath("keystores/server.jks").setPassword("password")))
 				.requestHandler(router::accept).listen(config().getInteger("http.port", 9000), result -> {
 					if (result.succeeded()) {
@@ -52,7 +60,7 @@ public class MainVerticle extends AbstractVerticle {
 					} else {
 						startFuture.fail(result.cause());
 					}
-				});
+				});*/
 	}
 
 	private void registerGeneralRoutes(Router router) {
@@ -61,12 +69,12 @@ public class MainVerticle extends AbstractVerticle {
 			response.putHeader("content-type", "text/html")
 					.end("<h1>Hello from my first Vert.x 3 application via routers</h1>");
 		});
-		router.route(Routes.STATIC_CONTENT).handler(StaticHandler.create("webroot"));
+		router.route(Routes.STATIC_CONTENT).handler(StaticHandler.create("webapp"));
 		
-		
-		router.route().handler(CookieHandler.create());
-	    router.route().handler(BodyHandler.create());
-	    router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
+//		
+//		router.route().handler(CookieHandler.create());
+//	    router.route().handler(BodyHandler.create());
+//	    router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 		/*AuthHandler redirectAuthHandler = RedirectAuthHandler.create(authProvider);
 		router.route(Routes.SECURE_CONTENT).handler(redirectAuthHandler);
 		// Handle the actual login

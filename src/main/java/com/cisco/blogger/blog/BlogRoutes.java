@@ -10,4 +10,6 @@ public interface BlogRoutes {
 	
 	String FAV_BLOG="/api/:areaOfInterest/blog";
 	
+	String BLOGS = "/api/blogs";
+	
 }
