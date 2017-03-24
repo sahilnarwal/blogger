@@ -5,7 +5,7 @@
   <groupId>com.cisco.blogger</groupId>
   <artifactId>desktop-microservice</artifactId>
   <packaging>jar</packaging>
-
+<version>0.0.1-SNAPSHOT</version>
   <name>desktop-microservice</name>
   <url>http://maven.apache.org</url>
 
@@ -94,10 +94,4 @@
 			</plugin>
 		</plugins>
 	</build>
-  <parent>
-  	<groupId>com.cisco.cmad</groupId>
-  	<artifactId>blogger</artifactId>
-  	<version>0.0.1-SNAPSHOT</version>
-  	<relativePath>../blogger</relativePath>
-  </parent>
 </project>
