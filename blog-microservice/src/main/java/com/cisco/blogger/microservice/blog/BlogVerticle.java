@@ -31,6 +31,7 @@ public class BlogVerticle extends AbstractVerticle{
 		registerSearchBlogRoute(router);
 		registerDeleteBlogRoute(router);
 		registerUpdateBlogRoute(router);
+		registerGetAllBlogRoutes(router);
 		
 		// Start server and listen
 		vertx.createHttpServer(/*new HttpServerOptions().setSsl(true)
@@ -43,7 +44,23 @@ public class BlogVerticle extends AbstractVerticle{
 					}
 				});
 	}
-	
+
+	private void registerGetAllBlogRoutes(Router router) {
+		System.out.println("BlogVerticle.registerGetAllBlogRoutes()");
+		// router.route(Routes.BLOGS).handler(BodyHandler.create());
+		router.get(BlogRoutes.BLOGS).handler(rctx -> {
+			System.out.println("BlogVerticle.registerGetAllBlogRoutes() got call ");
+
+			vertx.eventBus().send(BlogTopics.GET_ALL_BLOGS, rctx.getBodyAsJson(), r -> {
+				if (r.result() != null) {
+					rctx.response().setStatusCode(200).end(r.result().body().toString());
+				} else {
+					rctx.response().setStatusCode(400).end(r.cause().getMessage());
+				}
+			});
+		});
+	}
+
 	private void registerUpdateBlogRoute(Router router) {
 		router.route(BlogRoutes.BLOG).handler(BodyHandler.create());
 		router.put(BlogRoutes.BLOG).handler(rctx -> {
@@ -80,7 +97,7 @@ public class BlogVerticle extends AbstractVerticle{
 				});
 			}else if("tag".equalsIgnoreCase(type)){
 				String areaOfInterest = rctx.request().getParam("identifier");
-				vertx.eventBus().send(BlogTopics.FAV_BLOG, areaOfInterest, r -> {
+				vertx.eventBus().send(BlogTopics.GET_BLOGS_BY_TAG, areaOfInterest, r -> {
 					rctx.response().setStatusCode(200).end(r.result().body().toString());
 				});
 			}else {

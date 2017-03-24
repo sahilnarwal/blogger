@@ -58,11 +58,16 @@ public class BlogDBVerticle extends AbstractVerticle{
 			deleteBlog(message);
 		});
 		
-		vertx.eventBus().consumer(BlogTopics.FAV_BLOG, message -> {
+		vertx.eventBus().consumer(BlogTopics.GET_BLOGS_BY_TAG, message -> {
 			System.out.println("Fetch Fav Blog = ");
 			favBlog(message);
 		});
 		
+		vertx.eventBus().consumer(BlogTopics.GET_ALL_BLOGS, message -> {
+			System.out.println(" AllBlog Fetched = ");
+			allBlogs(message);
+		});
+
 	}
 	
 	private void updateBlog(Message<Object> message) {
@@ -177,6 +182,21 @@ public class BlogDBVerticle extends AbstractVerticle{
 		}
 
 	}
+
+	private void allBlogs(Message<Object> message) {
+  		System.out.println("BlogDBVerticle.processFetchAllBlogs()");
+  		BasicDAO<Blog, String> dao = new BasicDAO<>(Blog.class, datatstore);
+  		List<Blog> retreivedBlogs = dao.createQuery()
+  				.order(Sort.descending("updateDate")).asList();
+  		System.out.println("BlogDBVerticle.processFetchAllBlog "+ retreivedBlogs);
+  		if(retreivedBlogs==null){
+  			message.fail(404, "No Blog Found");
+  		}else{
+  			message.reply(Json.encodePrettily(retreivedBlogs));
+  			
+  		}
+  		
+  		}
 
 	@Override
 	public void stop() throws Exception {

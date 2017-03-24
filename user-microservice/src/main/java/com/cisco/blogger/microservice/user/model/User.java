@@ -6,7 +6,7 @@ import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
-@Entity
+@Entity(noClassnameStored = true)
 public class User {
 
 	@Id
@@ -15,7 +15,7 @@ public class User {
 	private String username;
 	private String email;
 	private long phoneNumber;
-	private String[] areaOfInterest;
+	private String areaOfInterest;
 	public String getName() {
 		return name;
 	}
@@ -40,10 +40,10 @@ public class User {
 	public void setPhoneNumber(long phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public String[] getAreaOfInterest() {
+	public String getAreaOfInterest() {
 		return areaOfInterest;
 	}
-	public void setAreaOfInterest(String[] areaOfInterest) {
+	public void setAreaOfInterest(String areaOfInterest) {
 		this.areaOfInterest = areaOfInterest;
 	}
 	public String getId() {
@@ -52,7 +52,7 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", username=" + username + ", email="
-				+ email + ", phoneNumber=" + phoneNumber + ", areaOfInterest=" + Arrays.toString(areaOfInterest) + "]";
+				+ email + ", phoneNumber=" + phoneNumber + ", areaOfInterest=" + areaOfInterest + "]";
 	}
 
 }

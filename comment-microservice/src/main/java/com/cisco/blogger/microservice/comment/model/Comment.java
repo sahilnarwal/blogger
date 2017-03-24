@@ -1,12 +1,17 @@
 package com.cisco.blogger.microservice.comment.model;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.Date;
+import java.util.TimeZone;
 
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
-@Entity
+import org.mongodb.morphia.annotations.PrePersist;
+@Entity(noClassnameStored=true)
 public class Comment {
 	
 	@Id
@@ -18,7 +23,7 @@ public class Comment {
 	
 	private String comment;
 	
-	private Instant dateOfCreation = Instant.now();
+	private String dateOfCreation;
 
 	public String getBlogId() {
 		return blogId;
@@ -49,9 +54,23 @@ public class Comment {
 		return id;
 	}
 
-	public Instant getDateOfCreation() {
+	public String getDateOfCreation() {
 		return dateOfCreation;
 	}
+	
+	@PrePersist
+	 	public void prePersist() {
+	 		dateOfCreation=(dateOfCreation == null) ? getFormateDate(Instant.now()) : dateOfCreation;
+	 	}
+	 
+	 	private String getFormateDate(Instant instant) {
+	 		long epoch= instant.getEpochSecond()*1000;
+	 		Date date = new Date(epoch);
+	 		DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+	 		format.setTimeZone(TimeZone.getTimeZone("IST"));
+	 		String formatted = format.format(date);
+	 		return formatted;
+	 	}
 
 	@Override
 	public String toString() {
