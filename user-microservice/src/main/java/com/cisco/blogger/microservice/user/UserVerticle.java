@@ -1,6 +1,7 @@
 package com.cisco.blogger.microservice.user;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Future;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 
@@ -8,13 +9,23 @@ public class UserVerticle extends AbstractVerticle {
 
 	
 	@Override
-	public void start() throws Exception {
+	public void start(Future<Void> startFuture) throws Exception {
 		System.out.println("Strating User Verticle");
 		Router router = SharedRouter.router;
 		// Add User UserRoutes
 		registerUserRegistrationRoute(router);
 		
 		registerUserUpdateRoute(router);
+		// Start server and listen
+				vertx.createHttpServer(/*new HttpServerOptions().setSsl(true)
+						.setKeyStoreOptions(new JksOptions().setPath("keystores/server.jks").setPassword("password"))*/)
+						.requestHandler(router::accept).listen(config().getInteger("http.port", 80), result -> {
+							if (result.succeeded()) {
+								startFuture.complete();
+							} else {
+								startFuture.fail(result.cause());
+							}
+						});
 	}
 	
 	private void registerUserUpdateRoute(Router router) {
