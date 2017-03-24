@@ -1,26 +1,16 @@
 package com.cisco.blogger.microservice.desktop;
 
-import com.cisco.blogger.microservice.auth.AuthVerticle;
-import com.cisco.blogger.microservice.auth.db.AuthDBVerticle;
-import com.cisco.blogger.microservice.blog.BlogVerticle;
-import com.cisco.blogger.microservice.blog.db.BlogDBVerticle;
-import com.cisco.blogger.microservice.comment.CommentVerticle;
-import com.cisco.blogger.microservice.comment.db.CommentDBVerticle;
-import com.cisco.blogger.microservice.user.UserVerticle;
-import com.cisco.blogger.microservice.user.db.UserDBVerticle;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
-import io.vertx.core.Vertx;
-import io.vertx.core.VertxOptions;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.net.JksOptions;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.StaticHandler;
 
-public class MainVerticle extends AbstractVerticle {
+public class MainVerticle extends AbstractVerticle {/*
 
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {
@@ -28,10 +18,10 @@ public class MainVerticle extends AbstractVerticle {
 		
 		Router router = SharedRouter.router;
 		
-		/*Vertx.clusteredVertx(new VertxOptions()	, res -> {
+		Vertx.clusteredVertx(new VertxOptions()	, res -> {
 			vertx = res.result();
 			
-		});*/
+		});
 		
 		// Add Routes
 		registerGeneralRoutes(router);
@@ -67,13 +57,13 @@ public class MainVerticle extends AbstractVerticle {
 		router.route(Routes.STATIC_CONTENT).handler(StaticHandler.create("webroot"));
 		
 		
-		/*router.route().handler(CookieHandler.create());
+		router.route().handler(CookieHandler.create());
 	    router.route().handler(BodyHandler.create());
 	    router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 		AuthHandler redirectAuthHandler = RedirectAuthHandler.create(authProvider);
 		router.route(Routes.SECURE_CONTENT).handler(redirectAuthHandler);
 		// Handle the actual login
-		router.route("/login").handler(FormLoginHandler.create(authProvider));*/
+		router.route("/login").handler(FormLoginHandler.create(authProvider));
 		
 	}
 
@@ -83,4 +73,4 @@ public class MainVerticle extends AbstractVerticle {
 		super.stop();
 	}
 	
-}
+*/}

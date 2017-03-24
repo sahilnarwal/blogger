@@ -108,6 +108,6 @@
   	<groupId>com.cisco.cmad</groupId>
   	<artifactId>blogger</artifactId>
   	<version>0.0.1-SNAPSHOT</version>
-  	<relativePath>../../blogger</relativePath>
+  	<relativePath>../blogger</relativePath>
   </parent>
 </project>
