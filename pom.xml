@@ -135,4 +135,12 @@
 		<url>https://travis-ci.org/sahilnarwal/blogger</url>
 	</ciManagement>
 	<inceptionYear>Jan 2017</inceptionYear>
+	<packaging>pom</packaging>
+	<modules>
+		<module>auth-microservice</module>
+		<module>blog-microservice</module>
+		<module>comment-microservice</module>
+		<module>desktop-microservice</module>
+		<module>user-microservice</module>
+	</modules>
 </project>
