@@ -1,7 +1,5 @@
 package com.cisco.blogger.microservice.user.model;
 
-import java.util.Arrays;
-
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;

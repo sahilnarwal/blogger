@@ -4,12 +4,14 @@ import java.util.ArrayList;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
+import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.jwt.JWTOptions;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CookieHandler;
+import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.JWTAuthHandler;
 import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
@@ -21,6 +23,13 @@ public class AuthVerticle extends AbstractVerticle{
 		System.out.println("Starting Auth Verticle");
 		Router router = Router.router(vertx);
 		
+		router.route().handler(CorsHandler.create("*")
+			      .allowedMethod(HttpMethod.GET)
+			      .allowedMethod(HttpMethod.POST)
+			      .allowedMethod(HttpMethod.PUT)
+			      .allowedMethod(HttpMethod.DELETE)
+			      .allowedMethod(HttpMethod.OPTIONS)
+			      .allowedHeader("Content-Type"));
 		router.route().handler(CookieHandler.create());
         router.route().handler(BodyHandler.create());
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));

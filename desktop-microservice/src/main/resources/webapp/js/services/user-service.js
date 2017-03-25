@@ -21,17 +21,17 @@
         function CreateUser(user) {
             console.log("CreateUser");
             
-            return $http.post('http://localhost:9000/api/user/', user).then(handleSuccess, handleError);
+            return $http.post('http://localhost:9001/api/user/', user).then(handleSuccess, handleError);
         }
  
         function UpdateUser(user) {
             console.log("UpdateUser");
-            return $http.put('http://localhost:9000/api/user/', user).then(handleSuccess, handleError);
+            return $http.put('http://localhost:9001/api/user/', user).then(handleSuccess, handleError);
         }
 
         function Login(user) {
             console.log("Login");
-            return $http.post('http://localhost:9000/api/user/login', user).then(handleSuccess, handleError);
+            return $http.post('http://localhost:9001/api/user/login', user).then(handleSuccess, handleError);
         }
 
         function SetCredentials(response) {

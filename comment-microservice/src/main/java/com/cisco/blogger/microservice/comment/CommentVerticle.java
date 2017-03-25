@@ -5,9 +5,11 @@ import com.cisco.blogger.microservice.comment.db.CommentDBVerticle;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
+import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.CorsHandler;
 
 public class CommentVerticle extends AbstractVerticle{
 
@@ -17,6 +19,14 @@ public class CommentVerticle extends AbstractVerticle{
 		Router router = SharedRouter.router;
 
 		vertx.deployVerticle(CommentDBVerticle.class.getName(), new DeploymentOptions().setWorker(true));
+		
+		router.route().handler(CorsHandler.create("*")
+			      .allowedMethod(HttpMethod.GET)
+			      .allowedMethod(HttpMethod.POST)
+			      .allowedMethod(HttpMethod.PUT)
+			      .allowedMethod(HttpMethod.DELETE)
+			      .allowedMethod(HttpMethod.OPTIONS)
+			      .allowedHeader("Content-Type"));
 		
 		router.route("/about").handler(rctx -> {
 			HttpServerResponse response = rctx.response();
@@ -31,7 +41,7 @@ public class CommentVerticle extends AbstractVerticle{
 		// Start server and listen
 				vertx.createHttpServer(/*new HttpServerOptions().setSsl(true)
 						.setKeyStoreOptions(new JksOptions().setPath("keystores/server.jks").setPassword("password"))*/)
-						.requestHandler(router::accept).listen(config().getInteger("http.port", 80), result -> {
+						.requestHandler(router::accept).listen(config().getInteger("http.port", 9003), result -> {
 							if (result.succeeded()) {
 								startFuture.complete();
 							} else {
