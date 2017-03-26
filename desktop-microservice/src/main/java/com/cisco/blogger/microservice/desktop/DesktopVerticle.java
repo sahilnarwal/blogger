@@ -1,17 +1,14 @@
 package com.cisco.blogger.microservice.desktop;
 
 
-import java.util.HashMap;
-import java.util.Map;
-
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpMethod;
+import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.net.JksOptions;
 import io.vertx.ext.auth.jwt.JWTAuth;
-import io.vertx.ext.auth.mongo.MongoAuth;
-import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.AuthHandler;
 import io.vertx.ext.web.handler.CookieHandler;
@@ -21,7 +18,6 @@ import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.ext.web.handler.UserSessionHandler;
 import io.vertx.ext.web.sstore.ClusteredSessionStore;
-import io.vertx.ext.web.sstore.LocalSessionStore;
 
 public class DesktopVerticle extends AbstractVerticle {
 
@@ -53,7 +49,7 @@ public class DesktopVerticle extends AbstractVerticle {
 			    .put("type", "jceks")
 			    .put("password", "secret"));
 
-		JWTAuth provider = JWTAuth.create(vertx, config); 
+		/*JWTAuth provider = JWTAuth.create(vertx, config); 
 		
 		router.route().handler(CookieHandler.create());
 		router.route().handler(SessionHandler.create(ClusteredSessionStore.create(vertx)));
@@ -61,13 +57,13 @@ public class DesktopVerticle extends AbstractVerticle {
 
 		AuthHandler redirectAuthHandler = RedirectAuthHandler.create(provider, "/login.html");
 		
-		router.route(Routes.SECURE_CONTENT).handler(redirectAuthHandler); 
+		router.route(Routes.SECURE_CONTENT).handler(redirectAuthHandler); */
 		
-		router.route(Routes.STATIC_CONTENT).handler(StaticHandler.create("webapp")); 
+		router.route(Routes.STATIC_CONTENT).handler(StaticHandler.create("webapp"));
 		
 		// Start server and listen
-		vertx.createHttpServer(/*new HttpServerOptions().setSsl(true)
-				.setKeyStoreOptions(new JksOptions().setPath("keystores/server.jks").setPassword("password"))*/)
+		vertx.createHttpServer(new HttpServerOptions().setSsl(true)
+				.setKeyStoreOptions(new JksOptions().setPath("keystores/server.jks").setPassword("password")))
 				.requestHandler(router::accept).listen(config().getInteger("http.port", 9000), result -> {
 					if (result.succeeded()) {
 						startFuture.complete();
