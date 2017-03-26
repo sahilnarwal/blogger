@@ -53,7 +53,7 @@ public class DesktopVerticle extends AbstractVerticle {
 			    .put("type", "jceks")
 			    .put("password", "secret"));
 
-		JWTAuth provider = JWTAuth.create(vertx, config);
+		JWTAuth provider = JWTAuth.create(vertx, config); 
 		
 		router.route().handler(CookieHandler.create());
 		router.route().handler(SessionHandler.create(ClusteredSessionStore.create(vertx)));
