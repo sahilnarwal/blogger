@@ -8,7 +8,7 @@ public interface AuthTopics {
 
 	String AUNTHENTICATE = "com.cisco.blogger.auth.authenticate";
 	
-	String AUTHORIZE = "com.cisco.blogger.auth.authorize";
+	String VALIDATE_TOKEN = "com.cisco.blogger.auth.validatetoken";
 	
 	String NEW_TOKEN = "com.cisco.blogger.auth.newtoken";
 	

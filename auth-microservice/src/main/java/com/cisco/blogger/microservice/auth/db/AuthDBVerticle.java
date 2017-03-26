@@ -26,12 +26,7 @@ public class AuthDBVerticle extends AbstractVerticle{
 	public void start() throws Exception {
 		System.out.println("Strating Auth DB Verticle");
 		
-		Router router = SharedRouter.router;
-		
 		// We need cookies, sessions and request bodies
-	    router.route().handler(CookieHandler.create());
-	    router.route().handler(BodyHandler.create());
-	    router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 		
 		Map<String, Object> clientConfig = new HashMap<>();
 		clientConfig.put("db_name", "credentials");
@@ -51,35 +46,6 @@ public class AuthDBVerticle extends AbstractVerticle{
 		authProvider.setPermissionField("permission");
 		authProvider.setRoleField("roles");
 
-		
-		// We need a user session handler too to make sure the user is stored in the session between requests
-	   // router.route().handler(UserSessionHandler.create(authProvider));
-	    
-	    // Any requests to URI starting '/private/' require login
-	    //router.route("/private/*").handler(RedirectAuthHandler.create(authProvider, "/static/loginpage.html"));
-	    
-	 // Serve the static private pages from directory 'private'
-	    router.route("/private/*").handler(StaticHandler.create().setCachingEnabled(false).setWebRoot("private"));
-	    
-	    
-	 // Handles the actual login
-	    //router.route("/loginhandler").handler(FormLoginHandler.create(authProvider));
-	    
-	 // Implement logout
-	    router.route("/logout").handler(context -> {
-	      context.clearUser();
-	      // Redirect back to the index page
-	      context.response().putHeader("location", "/").setStatusCode(302).end();
-	    });
-		
-		router.route("/loginhandler").handler(BodyHandler.create());
-		router.post("/loginhandler").handler(rctx -> {
-			//String cred = rctx.request().getHeader("Authorization");
-			//System.out.println("Authentication headers"+cred);
-			vertx.eventBus().send(AuthTopics.AUNTHENTICATE, rctx.getBodyAsJson(), r -> {
-				rctx.response().setStatusCode(200).end("User Authenticated");
-			});
-		});
 		// Add Topic Listeners
 		vertx.eventBus().consumer(AuthTopics.AUNTHENTICATE, message -> {
 			User user = Json.decodeValue(message.body().toString(), User.class);
@@ -88,11 +54,12 @@ public class AuthDBVerticle extends AbstractVerticle{
 				if(res.succeeded()){
 					io.vertx.ext.auth.User validatedUser = res.result();
 					System.out.println("Authentication succedded with result ="+validatedUser);
+					message.reply(true);
 				}else {
 					System.out.println("Authentication failed");
+					message.reply(false);
 				}
 			});
-			message.reply(true);
 		});
 
 		// Add Topic Listeners

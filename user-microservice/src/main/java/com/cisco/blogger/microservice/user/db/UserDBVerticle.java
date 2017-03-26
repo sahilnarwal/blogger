@@ -13,6 +13,7 @@ import com.mongodb.MongoClient;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
 
 public class UserDBVerticle extends AbstractVerticle {
 	
@@ -30,10 +31,9 @@ public class UserDBVerticle extends AbstractVerticle {
 		System.out.println("Strating User DB Verticle");
 		
 		vertx.eventBus().consumer(UserTopics.GET_USER, message -> {
+			System.out.println("fetching user details for username = "+message.body().toString());
 			getUserDetails(message);
-			//User user = Json.decodeValue(message.body().toString(), User.class);
-			System.out.println("User Fetched = ");
-			message.reply(true);
+			
 		});
 		
 		vertx.eventBus().consumer(UserTopics.ADD_USER, message -> {
@@ -47,7 +47,6 @@ public class UserDBVerticle extends AbstractVerticle {
 			//User user = Json.decodeValue(message.body().toString(), User.class);
 			System.out.println("User updated = ");
 			processUpdateUser(message);
-			message.reply(true);
 		});
 	}
 
@@ -82,7 +81,9 @@ public class UserDBVerticle extends AbstractVerticle {
 		}
 		BasicDAO<User, String> dao = new BasicDAO<>(User.class, datatstore);
 		Object user=dao.save(regData).getId();
-				if(user==null){
+		JsonObject userCred = new JsonObject().put("username", regData.getUsername()).put("password", regData.getPassword());
+		vertx.eventBus().send("com.cisco.blogger.auth.addcredentials", userCred);
+		if(user==null){
 			message.reply("No User created");
 		}else{
 			message.reply(Json.encodePrettily(user));
@@ -90,11 +91,10 @@ public class UserDBVerticle extends AbstractVerticle {
 	}
 
 	private void getUserDetails(Message<Object> message) {
-		User userDetail = Json.decodeValue(message.body().toString(), User.class);
 		BasicDAO<User, String> dao = new BasicDAO<>(User.class, datatstore);
-		System.out.println("UserDBVerticle.getUserDetails() getUsername  "+userDetail.getUsername());
+		System.out.println("UserDBVerticle.getUserDetails() getUsername  "+message.body().toString());
 		Query<User> query=dao.createQuery();
-		query.and(query.criteria("username").equal(userDetail.getUsername()));
+		query.and(query.criteria("username").equal(message.body().toString()));
 		User user =query.get();
 		
 		if(user==null){

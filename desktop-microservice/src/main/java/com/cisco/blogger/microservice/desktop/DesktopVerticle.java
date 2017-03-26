@@ -9,6 +9,7 @@ import io.vertx.core.Future;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.mongo.MongoAuth;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.web.Router;
@@ -47,29 +48,18 @@ public class DesktopVerticle extends AbstractVerticle {
 					.end("<h1>Hello from my first Vert.x 3 application via routers</h1>");
 		});
 
-		Map<String, Object> clientConfig = new HashMap<>();
-		clientConfig.put("db_name", "credentials");
-		//clientConfig.put("connection_string", "mongodb://localhost:27017");
-		clientConfig.put("host", "localhost");
-		clientConfig.put("port", 27017);
-		MongoClient client = MongoClient.createShared(vertx, new JsonObject(clientConfig));
-		JsonObject authProperties = new JsonObject();
-		MongoAuth mongoAuthProvider = MongoAuth.create(client, authProperties);
-		mongoAuthProvider.setCollectionName("user");
-		// mongo column names
-		mongoAuthProvider.setUsernameField("username");
-		mongoAuthProvider.setPasswordField("password");
-		// user object field names
-		mongoAuthProvider.setUsernameCredentialField("username");
-		mongoAuthProvider.setPasswordCredentialField("password");
-		mongoAuthProvider.setPermissionField("permission");
-		mongoAuthProvider.setRoleField("roles");
+		JsonObject config = new JsonObject().put("keyStore", new JsonObject()
+			    .put("path", "keystores/jwt-keystore.jceks")
+			    .put("type", "jceks")
+			    .put("password", "secret"));
+
+		JWTAuth provider = JWTAuth.create(vertx, config);
 		
 		router.route().handler(CookieHandler.create());
 		router.route().handler(SessionHandler.create(ClusteredSessionStore.create(vertx)));
-		router.route().handler(UserSessionHandler.create(mongoAuthProvider));
+		router.route().handler(UserSessionHandler.create(provider)); 
 
-		AuthHandler redirectAuthHandler = RedirectAuthHandler.create(mongoAuthProvider, "/login.html");
+		AuthHandler redirectAuthHandler = RedirectAuthHandler.create(provider, "/login.html");
 		
 		router.route(Routes.SECURE_CONTENT).handler(redirectAuthHandler); 
 		

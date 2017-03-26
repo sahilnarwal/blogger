@@ -8,14 +8,15 @@
         service.UpdateUser = UpdateUser;
 
         service.Login = Login;
+        service.SetUserInfo = SetUserInfo;
         service.SetCredentials = SetCredentials;
         service.ClearCredentials = ClearCredentials;
  
         return service;
  
-        function GetUserInfo(userEmail) {
+        function GetUserInfo(username) {
             console.log("GetUserInfo");
-            return $http.get('online/blog/userInfo/' + userEmail).then(handleSuccess, handleError);
+            return $http.get('http://localhost:9001/api/user/' + username).then(handleSuccess, handleError);
         }
  
         function CreateUser(user) {
@@ -37,16 +38,20 @@
         function SetCredentials(response) {
             console.log("SetCredentials");
             // var authdata = Base64.encode(email + ':' + );
-            $window.localStorage.setItem("currentUser", JSON.stringify(response));
+            $window.localStorage.setItem("token", response);
             $window.localStorage.setItem("authenticated", true);
+        }
+        
+        function SetUserInfo(response) {
+            console.log("SetUserInfo");
+            $window.localStorage.setItem("currentUser", JSON.stringify(response));
         }
  
         function ClearCredentials() {
             console.log("ClearCredentials");
             $window.localStorage.removeItem("currentUser");
             $window.localStorage.removeItem("authenticated");
-            // $rootScope.currentUser = {};
-            // $rootScope.authenticated = false;
+            $window.localStorage.removeItem("token");
         }
 
         // private functions 
