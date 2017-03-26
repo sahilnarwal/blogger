@@ -16,10 +16,12 @@
 	</div>
 	<div id="single-blog" class="col-sm-7">
 		<!-- Main Blog Body -->
-		<h1>{{blog.title}}</h1>
+		<h1>
+		<span style="color: #408080 ">{{blog.title}}</span>
+		</h1>
 		<h6>
 			<!-- <img src="{{blog.post.blogAuthor.avatarImgSrc}}" style="border-radius: 50%;" width="20" height="20"> -->
-			<cite class="text-muted">&nbsp;Posted by <a href="#">{{blog.author}}</a>, {{blog.timeOfCreation | date:"MMM d, y h:mm:ss a"}}.
+			<cite class="text-muted">&nbsp;Posted by {{blog.author}}, {{blog.timeOfCreation | date:"MMM d, y h:mm:ss a"}}.
 			</cite>
 		</h6>
 
@@ -32,7 +34,7 @@
 		<br>
 		<!-- <img src="{{blog.post.blogThumbnailLoc}}" style="border-radius: 5px;" width="800" height="200"> -->
 		<br>
-		<p style= "font-size: 13px; padding-top: 3px; letter-spacing: 1px; font-family: sans-serif; font-size: 14px;">{{blog.content}}</p>
+		<p style= "font-size: 13px; padding-top: 3px; letter-spacing: 1px; color: #408080; font-family: Open Sans; font-size: 14px;">{{blog.content}}</p>
 		<br>
 
 		<!-- Live Preview of comments-->
@@ -54,7 +56,9 @@
 			<form name="comment-form" ng-submit="spc.submitComment()"  role="form" novalidate>
 			<div class="col-sm-1">
 				<!-- <img src="{{spc.user.userInfo.avatarImgSrc}}" class="img-circle" height="40" width="40" alt="Avatar"> -->
-				<h6><a href="#">{{spc.user.username}}</a></h6>
+				<h6>
+				<span style="color: #408080">
+				{{spc.user.username}}</span></h6>
 			</div>
 			<div class="col-sm-11">	
 			<blockquote>
@@ -68,7 +72,7 @@
 		<!-- Older Comments Section -->
 		<div class="older-comments">
 			<blockquote>
-				<h4><span class="label label-info">{{blogComments.length}} Comments:</span></h4><br>
+				<h4><span class="label label-info">Comments:</span></h4><br>
 				<ul class="list-unstyled" id="comments-list">
 					<li class="comments-listing" ng-repeat="blogComment in blogComments">
 
@@ -78,7 +82,7 @@
 						<div class="col-sm-11" style="padding-bottom: 15px;">
 
 							<h5 style="padding-left: -10px;"><small>{{blogComment.userName}}</a>, On {{blogComment.dateOfCreation | date:"MMM d, y h:mm:ss a"}}</small></h5>
-							<p style="font-size: 13px; letter-spacing: 1px;">{{blogComment.comment}}</p>
+							<p style="font-size: 13px; letter-spacing: 1px; color: #408080;">{{blogComment.comment}}</p>
 							
 
 						</div>

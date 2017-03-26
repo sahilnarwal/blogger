@@ -6,23 +6,23 @@
 
 	<!-- New Post Section -->
 	<div id="new-blog-post" class="col-sm-5">
-		<h1><small style="color: #337ab7">Create New Post
+		<!-- <h1><small style="color: #337ab7">Create New Post
 			<span class="glyphicon glyphicon-pencil"></span>
-		</small></h1>
+		</small></h1> -->
 		<form name="post-form" ng-submit="npc.createPost()" role="form" novalidate>
 			<fieldset>
 				<div class="form-group">
-					<label for="blogTitleLbl" style="font-size: 15px; padding-left: 10px;"><strong>Title</strong></label>
+					<label for="blogTitleLbl" style="font-size: 15px; padding-left: 10px; color: #408080;"><strong>Title</strong></label>
 					<input type="text" name="blogTitleText" style="border-radius: 5px;" placeholder="Blog1" id="blogTitle" class="form-control" ng-model="npc.blog.title" required />
 				</div>
 				<br>
 				<div class="form-group">					
-					<label for="blogTagsLbl" style="font-size: 15px; padding-left: 10px;"><strong>Tags</strong></label>
+					<label for="blogTagsLbl" style="font-size: 15px; padding-left: 10px; color: #408080;"><strong>Tags</strong></label>
 					<input type="text" name="blogTagsText" style="border-radius: 5px;" placeholder="someone" id="blogTags" class="form-control" ng-model="tempTags" required />
 				</div>
 				<br>
 				<div class="form-group">						
-					<label for="blogContentLbl" style="font-size: 15px; padding-left: 10px;"><strong>Post Content</strong></label>
+					<label for="blogContentLbl" style="font-size: 15px; padding-left: 10px;color: #408080;"><strong>Post Content</strong></label>
 					<textarea class="form-control" style="border-radius: 5px;width: 700; height:200px;" ng-model="npc.blog.content" required></textarea>
 				</div>
 
