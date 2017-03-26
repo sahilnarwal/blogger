@@ -25,7 +25,7 @@
 
         function GetAllComments(blogId) {
             console.log("GetAllcomments "+'https://localhost:9002/api/comment/'+blogId);
-            return $http.get('https://localhost:9002/api/comment/'+blogId).then(handleSuccess, handleError);
+            return $http.get('https://localhost:9003/api/comment/'+blogId).then(handleSuccess, handleError);
         }
         function getAllPostsCount() {
             console.log("getAllPostsCount");
@@ -51,7 +51,7 @@
 
         function addComment(comment) {
             console.log("addComment");
-            return $http.post('https://localhost:9002/api/comment', comment).then(handleSuccess, handleError);
+            return $http.post('https://localhost:9003/api/comment', comment).then(handleSuccess, handleError);
         }
 
         // private functions 
