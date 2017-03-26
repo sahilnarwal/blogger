@@ -14,6 +14,7 @@ public class User {
 	private String email;
 	private long phoneNumber;
 	private String areaOfInterest;
+	private String password;
 	public String getName() {
 		return name;
 	}
@@ -47,6 +48,14 @@ public class User {
 	public String getId() {
 		return id;
 	}
+	
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", username=" + username + ", email="

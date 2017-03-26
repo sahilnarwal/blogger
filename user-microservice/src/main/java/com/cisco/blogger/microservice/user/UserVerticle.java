@@ -32,8 +32,9 @@ public class UserVerticle extends AbstractVerticle {
 			      .allowedHeader("Content-Type"));
 		
 		// Add User UserRoutes
+		registerUserDetailRoute(router);
 		registerUserRegistrationRoute(router);
-		
+		registerUserLoginRoute(router);
 		registerUserUpdateRoute(router);
 		// Start server and listen
 				vertx.createHttpServer(/*new HttpServerOptions().setSsl(true)
@@ -47,6 +48,35 @@ public class UserVerticle extends AbstractVerticle {
 						});
 	}
 	
+	private void registerUserDetailRoute(Router router) {
+		router.get(UserRoutes.USER_DETAIL).handler(rctx -> {
+			vertx.eventBus().send(UserTopics.GET_USER, rctx.request().getParam("username"), r -> {
+				rctx.response().setStatusCode(200).end(r.result().body().toString());
+			});
+		});
+		
+	}
+
+	private void registerUserLoginRoute(Router router) {
+		router.route(UserRoutes.USER_LOGIN).handler(BodyHandler.create());
+		System.out.println("Doing user login");
+		router.post(UserRoutes.USER_LOGIN).handler(rctx -> {
+			vertx.eventBus().send("com.cisco.blogger.auth.authenticate", rctx.getBodyAsJson(), r -> {
+				System.out.println("Authenticate callback succedded val = "+r.succeeded());
+				System.out.println("Authenticate return val"+r.result().body().toString());
+				if(r.succeeded() && r.result().body().toString().equals("true")){
+					vertx.eventBus().send("com.cisco.blogger.auth.newtoken", "", res-> {
+						System.out.println("New token return val="+res.result().body().toString());
+						rctx.response().setStatusCode(200).end(res.result().body().toString());
+					});
+				}else {
+					rctx.response().setStatusCode(401).end();
+				}
+			});
+		});
+		
+	}
+
 	private void registerUserUpdateRoute(Router router) {
 		router.route(UserRoutes.USER).handler(BodyHandler.create());
 		router.put(UserRoutes.USER).handler(rctx -> {

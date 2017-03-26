@@ -29,7 +29,22 @@
         		} else {
         			UserService.SetCredentials(response);
         			console.log("credentials set in session storage");
-        			$location.path('/');
+        		}
+        	});
+        	
+        	UserService.GetUserInfo(lc.user.username).then(function(response) {
+        	//	console.log("matchFound : "+response.matchFound);
+        		console.log("response : "+response.success);
+        		if (response.failure) {
+        			console.log("match not found");
+        			$scope.loginError = "Unable to fetch User Details. Please try again...";
+        			UserService.ClearCredentials();
+        			lc.dataLoading = false;
+        			
+        		} else {
+        			UserService.SetUserInfo(response);
+        			console.log("User Info set in session storage");
+        			$location.path('/home');
         			$timeout(function() {$window.location.reload();}, 100);
         		}
         	});

@@ -21,7 +21,7 @@
                    	 rc.dataLoading = false;
                    }else{
                 	   UserService.SetCredentials(response);
-                   	 $location.path('/');
+                   	 $location.path('/home');
                         console.log('path set');
                    }
                 });
