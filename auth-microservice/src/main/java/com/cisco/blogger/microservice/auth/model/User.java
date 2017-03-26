@@ -2,15 +2,8 @@ package com.cisco.blogger.microservice.auth.model;
 
 import java.util.List;
 
-import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-
-@Entity
 public class User {
 
-	@Id
-	private String id = new ObjectId().toString();
 	private String username;
 	private String password;
 	private List<String> roles; 
@@ -39,12 +32,10 @@ public class User {
 	public void setPermissions(List<String> permissions) {
 		this.permissions = permissions;
 	}
-	public String getId() {
-		return id;
-	}
+
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + ", roles=" + roles
+		return "User [username=" + username + ", password=" + password + ", roles=" + roles
 				+ ", permissions=" + permissions + "]";
 	}
 	

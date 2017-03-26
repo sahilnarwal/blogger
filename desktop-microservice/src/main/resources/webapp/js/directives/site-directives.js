@@ -5,7 +5,7 @@
 	.directive('siteHeader', function($rootScope) {
 		return {
 			restrict: 'E',
-			templateUrl : 'partials/site-header.html',
+			templateUrl : 'site-header.html',
 			controller : 'NavbarController',
 			controllerAs : 'nc'
 		}
@@ -13,7 +13,7 @@
 	.directive('siteFooter', function() {
 		return {
 			restrict: 'E',
-			templateUrl : 'partials/site-footer.html'
+			templateUrl : 'site-footer.html'
 		}
 	});
 })();

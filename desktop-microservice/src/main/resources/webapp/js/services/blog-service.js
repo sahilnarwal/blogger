@@ -20,7 +20,7 @@
         }
         function GetAllFavBlogs(areaOfInterest) {
             console.log("GetAllPosts"+'http://localhost:9002/api/'+areaOfInterest+'/blog');
-            return $http.get('http://localhost:9002/api/'+areaOfInterest+'/blog').then(handleSuccess, handleError);
+            return $http.get('http://localhost:9002/api/blog/'+areaOfInterest+'?type=tag').then(handleSuccess, handleError);
         }
 
         function GetAllComments(blogId) {
@@ -35,13 +35,13 @@
         function getPosts(searchStringJson) {
             console.log("getPosts : "+ searchStringJson.searchString);
             var searchString = searchStringJson.searchString;
-            return $http.get('http://localhost:9002/api/blog/'+searchString).then(handleSuccess, handleError);
+            return $http.get('http://localhost:9002/api/blog/'+searchString+'?type=title').then(handleSuccess, handleError);
         }
  
         function getPost(blogId) {
         	console.log(blogId);
         	console.log('http://localhost:9002/api/'+blogId+'/blog');
-            return $http.get('http://localhost:9002/api/blog/id/'+blogId).then(handleSuccess, handleError);
+            return $http.get('http://localhost:9002/api/blog/'+blogId++'?type=id').then(handleSuccess, handleError);
         }
 
         function createPost(blog) {

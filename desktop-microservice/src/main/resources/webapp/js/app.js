@@ -6,6 +6,11 @@
 	app.config(function($routeProvider) {
 		$routeProvider
 		.when("/", {
+			templateUrl : "./login.html",
+			controller : 'LoginController',
+			controllerAs : 'lc'
+		})
+		.when("/home", {
 			templateUrl : "./partials/main.html",
 			controller : 'MainPageController',
 			controllerAs : 'mpc',
@@ -21,12 +26,12 @@
                 }
 		})
 		.when("/signupForm", {
-			templateUrl : "./partials/signup.html",
+			templateUrl : "./signup.html",
 			controller : 'RegisterController',
 			controllerAs : 'rc'
 		})
 		.when ("/login", {
-			templateUrl : "./partials/login.html",
+			templateUrl : "./login.html",
 			controller : 'LoginController',
 			controllerAs : 'lc'
 		})

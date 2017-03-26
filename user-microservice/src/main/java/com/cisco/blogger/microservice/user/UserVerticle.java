@@ -27,6 +27,8 @@ public class UserVerticle extends AbstractVerticle {
 			      .allowedMethod(HttpMethod.PUT)
 			      .allowedMethod(HttpMethod.DELETE)
 			      .allowedMethod(HttpMethod.OPTIONS)
+			      .allowedHeader("Authorization")
+			      .allowedHeader("www-authenticate")
 			      .allowedHeader("Content-Type"));
 		
 		// Add User UserRoutes
