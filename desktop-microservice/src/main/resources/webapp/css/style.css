@@ -1,7 +1,7 @@
   body {
     /*font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;*/
     font-family: "CiscoSans";
-    color: #777;
+    color: #400040;
     background-image: url('../img/main7.jpg');
   }
   p {
@@ -44,7 +44,7 @@
     font-style: bold;
     margin-top: 0px;
     /*background-color: #0085be;*/
-    background-color: #2B85E7;
+    background-color: #408080;
     /*background-color:#e8b48e;*/
     border: 0;
     font-size: 13px;
@@ -68,7 +68,7 @@
   }
 
   .navbar-nav li a:hover {
-    color: lightgrey !important;
+    color: #0000ff!important;
   }
   .navbar-nav li.active a {
     color: white !important;
@@ -84,12 +84,12 @@
   }
 
   .open .dropdown-toggle {
-    color: #fff;
-    background-color: #2B85E7 !important;
+    color: #408080;
+    background-color: #408080 !important;
   }
 
   .dropdown-menu {
-    background-color: white !important;
+    background-color: #408080!important;
     border-radius: 10px;
     font-family: sans-serif;
     font-size: 13px;
@@ -99,10 +99,11 @@
   }
 
   .dropdown-menu li a {
-    color: #2B85E7 !important;
+   /*  color: #2B85E7 !important; */
+    color: white !important;
   }
   .dropdown-menu li a:hover {
-    background-color: #2B85E7 !important;
+    background-color: #408080!important;
   }
 
   /* Login related CSS */
@@ -118,7 +119,7 @@
   }
 
   .btn {
-    background-color: #2B85E7;
+    background-color: #408080;
     color:white;
     margin-top: 40px;
     margin-bottom: 10px;
@@ -209,7 +210,7 @@
     width: 100%;
     margin-top: 10px;
     margin-bottom: 10px; 
-    background-color: #2B85E7; 
+    background-color: #408080; 
     color: white;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
   }

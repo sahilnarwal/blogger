@@ -29,6 +29,8 @@ public class AuthVerticle extends AbstractVerticle{
 			      .allowedMethod(HttpMethod.PUT)
 			      .allowedMethod(HttpMethod.DELETE)
 			      .allowedMethod(HttpMethod.OPTIONS)
+			      .allowedHeader("Authorization")
+			      .allowedHeader("www-authenticate")
 			      .allowedHeader("Content-Type"));
 		router.route().handler(CookieHandler.create());
         router.route().handler(BodyHandler.create());

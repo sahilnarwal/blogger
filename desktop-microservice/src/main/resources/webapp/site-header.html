@@ -14,7 +14,7 @@
       </div>
       <div id="myNavbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-right" style="margin-top: 4px;padding-right: 20px;">
-          <li><a href="#/">
+          <li ng-show="nc.authenticated"><a href="#/">
           <span class="glyphicon glyphicon-home"></span> HOME</a></li>
           <li ng-hide="nc.authenticated">
             <a href="#signupForm">SIGN UP
@@ -42,7 +42,7 @@
             </ul>
           </li>
   
-          <li>
+          <li ng-show="nc.authenticated">
             <form role="search" method="get" class="navbar-form">
               <input type="text" name="q" class="form-control" ng-model="searchString" placeholder="Find Blog...">
               <a ng-href="#searchResults/{{searchString}}">

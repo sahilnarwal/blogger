@@ -28,6 +28,8 @@ public class BlogVerticle extends AbstractVerticle{
 			      .allowedMethod(HttpMethod.PUT)
 			      .allowedMethod(HttpMethod.DELETE)
 			      .allowedMethod(HttpMethod.OPTIONS)
+			      .allowedHeader("Authorization")
+			      .allowedHeader("www-authenticate")
 			      .allowedHeader("Content-Type"));
 		
 		router.route("/about").handler(rctx -> {

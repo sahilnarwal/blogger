@@ -4,8 +4,8 @@ public interface Routes {
 	
 	String ABOUT = "/about";
 	
-	String STATIC_CONTENT = "/static/*";
+	String STATIC_CONTENT = "/*";
 	
-	String SECURE_CONTENT = "/api/*";
+	String SECURE_CONTENT = "/partials/*";
 
 }
