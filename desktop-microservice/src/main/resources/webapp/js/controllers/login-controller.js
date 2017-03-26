@@ -19,7 +19,7 @@
 
         	UserService.Login(lc.user).then(function(response) {
         	//	console.log("matchFound : "+response.matchFound);
-        		console.log("response : "+response.success);
+        		console.log("response : "+response);
         		if (response.failure) {
         			console.log("match not found");
         			$scope.loginError = "Username or password doesn't match. Please try again...";
@@ -34,7 +34,7 @@
         	
         	UserService.GetUserInfo(lc.user.username).then(function(response) {
         	//	console.log("matchFound : "+response.matchFound);
-        		console.log("response : "+response.success);
+        		console.log("response : "+response);
         		if (response.failure) {
         			console.log("match not found");
         			$scope.loginError = "Unable to fetch User Details. Please try again...";
