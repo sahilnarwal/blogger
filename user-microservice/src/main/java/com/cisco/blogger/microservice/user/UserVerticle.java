@@ -6,6 +6,8 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpMethod;
+import io.vertx.core.http.HttpServerOptions;
+import io.vertx.core.net.JksOptions;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
@@ -37,8 +39,8 @@ public class UserVerticle extends AbstractVerticle {
 		registerUserLoginRoute(router);
 		registerUserUpdateRoute(router);
 		// Start server and listen
-				vertx.createHttpServer(/*new HttpServerOptions().setSsl(true)
-						.setKeyStoreOptions(new JksOptions().setPath("keystores/server.jks").setPassword("password"))*/)
+				vertx.createHttpServer(new HttpServerOptions().setSsl(true)
+						.setKeyStoreOptions(new JksOptions().setPath("keystores/server.jks").setPassword("password")))
 						.requestHandler(router::accept).listen(config().getInteger("http.port", 9001), result -> {
 							if (result.succeeded()) {
 								startFuture.complete();
