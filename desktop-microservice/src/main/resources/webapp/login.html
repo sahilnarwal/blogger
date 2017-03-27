@@ -2,7 +2,7 @@
   <div id="login-section" class="container-fluid" style= "padding-top: 80px;">
     <div id="login-col-sm-4-1" class="col-sm-4"></div>
     <div id="login-col-sm-4-2" class="col-sm-4">
-    <h3 style="color: #2B85E7; text-align:center; font-family: 'Bauhaus 93';">LOGIN</h3>
+    <h3 style="color: #2B85E7; text-align:center; font-family: 'Open Sans';">LOGIN</h3>
       <form name="login-form" ng-submit="lc.login()" role="form" novalidate>
         <fieldset>
           <div class="imgcontainer" style="text-align: center; margin: 14px 0 6px 0;">
@@ -20,7 +20,7 @@
           <div class="form-actions">
             <button type="submit" ng-disabled="form.$invalid || lc.dataLoading" class="btn btn-primary" style="padding-left: 20px;">Login  <span class="glyphicon glyphicon-log-in"></span></button>
             <img ng-if="lc.dataLoading" src="./img/loading.gif" style="display: inline-block;">
-            <a href="#signupForm" class="btn btn-link pull-right">Signup</a>
+            <a href="#signupForm" class="btn btn-link pull-right">Register<span class="glyphicon glyphicon-user"></a>
 
             <!-- Error label for wrong credentials-->
             <label for="error" style="font-size: 13px; padding-left: 10px; color: red; text-align: center;">{{loginError}}</label>

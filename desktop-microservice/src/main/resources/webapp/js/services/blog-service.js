@@ -24,8 +24,13 @@
         }
 
         function GetAllComments(blogId) {
+<<<<<<< HEAD
             console.log("GetAllcomments "+'https://localhost:443/api/comment/'+blogId);
             return $http.get('https://35.184.112.239:443/api/comment/'+blogId).then(handleSuccess, handleError);
+=======
+            console.log("GetAllcomments "+'https://localhost:9002/api/comment/'+blogId);
+            return $http.get('https://localhost:9003/api/comment/'+blogId).then(handleSuccess, handleError);
+>>>>>>> refs/heads/master
         }
         function getAllPostsCount() {
             console.log("getAllPostsCount");

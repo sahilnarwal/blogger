@@ -1,8 +1,8 @@
   body {
-    /*font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;*/
-    font-family: "CiscoSans";
+    font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+  /*   font-family: "CiscoSans"; */
     color: #400040;
-    background-image: url('../img/main7.jpg');
+    background-image: url('../img/main6.png');
   }
   p {
     font-weight: 300;
@@ -40,7 +40,7 @@
   }
 
   .navbar {
-    font-family: sans-serif;
+    font-family: Open Sans;
     font-style: bold;
     margin-top: 0px;
     /*background-color: #0085be;*/
@@ -55,12 +55,12 @@
   }
 
   .navbar li a, .navbar { 
-    font-family: sans-serif;
+    font-family: Open Sans;
     color: white !important;
   }
   
   .navbar-brand { 
-    font-family: 'Bauhaus 93';
+    font-family: Open Sans;
     letter-spacing: 1px;
     color: white !important;
     font-size: 20px;
@@ -91,7 +91,7 @@
   .dropdown-menu {
     background-color: #408080!important;
     border-radius: 10px;
-    font-family: sans-serif;
+    font-family: Open Sans;
     font-size: 13px;
     letter-spacing: 2px;
     text-align: right;
