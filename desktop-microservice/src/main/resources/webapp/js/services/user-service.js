@@ -16,23 +16,23 @@
  
         function GetUserInfo(username) {
             console.log("GetUserInfo");
-            return $http.get('https://localhost:9001/api/user/' + username).then(handleSuccess, handleError);
+            return $http.get('https://35.185.201.222:443/api/user/' + username).then(handleSuccess, handleError);
         }
  
         function CreateUser(user) {
             console.log("CreateUser");
             
-            return $http.post('https://localhost:9001/api/user/', user).then(handleSuccess, handleError);
+            return $http.post('https://35.185.201.222:443/api/user/', user).then(handleSuccess, handleError);
         }
  
         function UpdateUser(user) {
             console.log("UpdateUser");
-            return $http.put('https://localhost:9001/api/user/', user).then(handleSuccess, handleError);
+            return $http.put('https://35.185.201.222:443/api/user/', user).then(handleSuccess, handleError);
         }
 
         function Login(user) {
             console.log("Login");
-            return $http.post('https://localhost:9001/api/user/login', user).then(handleSuccess, handleError);
+            return $http.post('https://35.185.201.222:443/api/user/login', user).then(handleSuccess, handleError);
         }
 
         function SetCredentials(response) {

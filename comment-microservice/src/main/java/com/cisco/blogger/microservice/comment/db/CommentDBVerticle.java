@@ -19,7 +19,7 @@ public class CommentDBVerticle extends AbstractVerticle {
 	private Datastore datatstore;
 	
 	public CommentDBVerticle() {
-		MongoClient mongo = new MongoClient("localhost", 27017);
+		MongoClient mongo = new MongoClient("comment-microservice-db", 27017);
 		Morphia morphia = new Morphia();
 		datatstore = morphia.createDatastore(mongo, "comments");
 	}

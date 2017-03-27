@@ -45,7 +45,7 @@ public class CommentVerticle extends AbstractVerticle{
 		// Start server and listen
 				vertx.createHttpServer(new HttpServerOptions().setSsl(true)
 						.setKeyStoreOptions(new JksOptions().setPath("keystores/server.jks").setPassword("password")))
-						.requestHandler(router::accept).listen(config().getInteger("http.port", 9003), result -> {
+						.requestHandler(router::accept).listen(config().getInteger("http.port", 443), result -> {
 							if (result.succeeded()) {
 								startFuture.complete();
 							} else {

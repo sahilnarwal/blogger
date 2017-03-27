@@ -31,7 +31,7 @@ public class AuthDBVerticle extends AbstractVerticle{
 		Map<String, Object> clientConfig = new HashMap<>();
 		clientConfig.put("db_name", "credentials");
 		//clientConfig.put("connection_string", "mongodb://localhost:27017");
-		clientConfig.put("host", "localhost");
+		clientConfig.put("host", "auth-microservice-db");
 		clientConfig.put("port", 27017);
 		MongoClient client = MongoClient.createShared(vertx, new JsonObject(clientConfig));
 		JsonObject authProperties = new JsonObject();

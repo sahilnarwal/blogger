@@ -20,7 +20,7 @@ public class UserDBVerticle extends AbstractVerticle {
 	private Datastore datatstore;
 	
 	public UserDBVerticle() {
-		MongoClient mongo = new MongoClient("localhost", 27017);
+		MongoClient mongo = new MongoClient("user-microservice-db", 27017);
 		Morphia morphia = new Morphia();
 		datatstore = morphia.createDatastore(mongo, "users");
 	}
