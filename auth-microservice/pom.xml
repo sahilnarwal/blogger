@@ -12,7 +12,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	<java.version>1.8</java.version>
 	<junit.version>4.12</junit.version>
-	<vertx.web.version>3.3.3</vertx.web.version>
+	<vertx.web.version>3.5.4</vertx.web.version>
 	<vertx.auth.mongo.version>3.3.3</vertx.auth.mongo.version>
 	<vertx.auth.jwt.version>3.3.3</vertx.auth.jwt.version>
   </properties>
